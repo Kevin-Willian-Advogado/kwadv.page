@@ -1,0 +1,152 @@
+<main class="p-8 min-h-screen bg-gray-50/50 font-sans pt-25">
+    <div class="max-w-300 mx-auto">
+        
+        <section class="relative rounded-2xl overflow-hidden bg-[#111827] h-100 shadow-lg group">
+            @for (item of featuredArticles; track item.slug; let i = $index) {
+                <div [class.opacity-100]="currentBannerIndex === i" 
+                     [class.opacity-0]="currentBannerIndex !== i"
+                     class="absolute inset-0 transition-opacity duration-1000 ease-in-out">
+                    
+                    <div class="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent z-10"></div>
+                    
+                    <img [src]="item.coverImageUrl" class="w-full h-full object-cover" [alt]="item.title">
+                    
+                    <div class="absolute inset-0 z-20 p-12 flex flex-col justify-center max-w-2xl">
+                        <span class="text-[#273F4B] bg-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider w-fit mb-4">
+                            {{ item.categoryName }}
+                        </span>
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
+                            {{ item.title }}
+                        </h2>
+                        <p class="text-gray-300 text-sm md:text-base mb-6 line-clamp-2 font-light">
+                            {{ item.metaDescription }}
+                        </p>
+                        <a href="artigo/{{ item.slug }}" class="w-fit px-6 py-3 bg-[#273F4B] text-white text-sm font-bold rounded-lg hover:bg-[#1a2b34] transition-all">
+                            Ler Artigo Completo
+                        </a>
+                    </div>
+                </div>
+            }
+
+            <div class="absolute bottom-6 right-12 z-30 flex items-center gap-4">
+                <div class="flex gap-2">
+                    @for (dot of featuredArticles; track $index; let i = $index) {
+                        <button (click)="currentBannerIndex = i" 
+                                [class.w-8]="currentBannerIndex === i"
+                                [class.bg-white]="currentBannerIndex === i"
+                                [class.bg-white/40]="currentBannerIndex !== i"
+                                class="h-1.5 w-4 rounded-full transition-all duration-300"></button>
+                    }
+                </div>
+                <div class="flex gap-1 ml-4">
+                    <button (click)="prevBanner()" class="p-2 text-white/50 hover:text-white transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button (click)="nextBanner()" class="p-2 text-white/50 hover:text-white transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            </div>
+    </div>
+    <div class="max-w-300 mx-auto pt-10">
+        
+        <header class="mb-10">
+            <h1 class="text-2xl font-bold text-gray-800 tracking-tight">Artigos</h1>
+            <p class="text-sm text-gray-500">Dicas e atualizações do cenário jurídico.</p>
+        </header>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            
+            <div class="flex-1 order-2 lg:order-1">
+                <div class="grid gap-4">
+                    @for (article of filteredArticles; track article.slug) {
+                        <article class="group flex flex-col sm:flex-row bg-white border border-gray-100 rounded-xl overflow-hidden hover:border-[#273F4B]/30 hover:shadow-md transition-all duration-300">
+                            
+                            <div class="sm:w-56 h-48 sm:h-auto overflow-hidden bg-gray-100">
+                                <img [src]="article.coverImageUrl" [alt]="article.title" 
+                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            </div>
+
+                            <div class="flex-1 p-6 flex flex-col">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2 py-0.5 text-[10px] uppercase font-bold bg-[#273F4B]/5 text-[#273F4B] rounded-full">
+                                        {{ article.categoryName }}
+                                    </span>
+                                    <span class="text-[11px] text-gray-400 font-medium">{{ article.publishedAt | date:"dd 'de' MMMM 'de' yyyy" : '-0300' : 'pt-BR' }}</span>
+                                </div>
+
+                                <h3 class="text-lg font-bold text-gray-900 group-hover:text-[#273F4B] transition-colors mb-2 leading-snug">
+                                    {{ article.title }}
+                                </h3>
+
+                                <p class="text-gray-500 text-sm line-clamp-2 mb-4 font-light leading-relaxed">
+                                    {{ article.metaDescription }}
+                                </p>
+
+                                    <a href="artigo/{{ article.slug }}" class="text-sm font-bold text-[#273F4B] hover:underline flex items-center gap-1">
+                                        Ler mais
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                    </a>
+                            </div>
+                        </article>
+                    }
+
+                    @if (filteredArticles.length === 0) {
+                        <div class="p-12 text-center bg-white rounded-xl border border-dashed border-gray-200 text-gray-500">
+                            Nenhum conteúdo encontrado para sua pesquisa.
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <aside class="w-80 order-2">
+                <div class="sticky top-25 space-y-6">
+                    
+                    <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <h4 class="text-sm font-bold text-gray-800 uppercase tracking-wider mb-4">Pesquisar</h4>
+                        <div class="relative">
+                            <input #search (input)="onSearch(search.value)" type="text" 
+                                class="w-full pl-10 pr-4 h-11 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#273F4B]/20 focus:border-[#273F4B] outline-none transition-all"
+                                placeholder="Buscar conteúdo...">
+                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <h4 class="text-sm font-bold text-gray-800 uppercase tracking-wider mb-4">Áreas de Interesse</h4>
+                        <div class="flex flex-col gap-1">
+                            @for (cat of categories; track cat) {
+                                <button (click)="selectedCategory = cat"
+                                    [class.bg-[#273F4B]/5]="selectedCategory === cat"
+                                    [class.text-[#273F4B]]="selectedCategory === cat"
+                                    [class.font-bold]="selectedCategory === cat"
+                                    class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-all text-left">
+                                    {{ cat }}
+                                    @if (selectedCategory === cat) {
+                                        <span class="w-1.5 h-1.5 bg-[#273F4B] rounded-full"></span>
+                                    }
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+    <section class="w-8/10 max-w-300 mx-auto py-30 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+            Precisa de Consultoria Jurídica Especializada?
+        </h2>
+        <p class="text-gray-700 mb-6">
+            Entre em contato conosco e descubra como podemos ajudar no seu caso.
+        </p>
+        <a href="https://wa.me/5511999999999" target="_blank"
+        class="inline-block bg-(--color-1) text-white px-8 py-3 rounded-md font-semibold shadow-md">
+            Fale Conosco
+        </a>
+    </section>
+</main>
