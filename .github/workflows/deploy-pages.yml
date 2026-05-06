@@ -35,9 +35,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Add SPA fallback
-        run: cp dist/kwadv.page/browser/index.html dist/kwadv.page/browser/404.html
-
       - name: Configure Pages
         uses: actions/configure-pages@v5
 

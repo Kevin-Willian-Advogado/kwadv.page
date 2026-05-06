@@ -29,5 +29,6 @@ export const routes: Routes = [
             { path: 'artigos', component: Articles, resolve: { articles: allArticlesResolver, categories: allCategoriesResolver } },
             { path: 'artigo/:slug', component: Article, resolve: { article: articleBySlugResolver } }
         ]
-    }
+    },
+    { path: '**', redirectTo: '' }
 ];
