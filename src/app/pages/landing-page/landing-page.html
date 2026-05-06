@@ -168,16 +168,18 @@
                 <span class="text-[#273F4B] text-sm font-bold uppercase tracking-wider">Conteúdo</span>
                 <h2 class="text-4xl font-bold text-gray-900 mt-4">Artigos em Destaque</h2>
             </div>
-            <a href="/blog" class="mt-6 md:mt-0 inline-flex items-center border-2 border-gray-300 px-5 py-2 rounded-md text-sm font-medium text-gray-700 hover:border-[#273F4B] hover:text-[#273F4B] transition-colors">
+            <a href="/artigos" class="mt-6 md:mt-0 inline-flex items-center border-2 border-gray-300 px-5 py-2 rounded-md text-sm font-medium text-gray-700 hover:border-[#273F4B] hover:text-[#273F4B] transition-colors">
                 <p>Ver Todos</p>
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </a>
         </div>
         <div class="grid md:grid-cols-3 gap-8">
-            @for (article of allArticles; track article.id) {
+            @for (article of featuredArticles; track article.id) {
                 <a href="/artigo/{{article.slug}}" class="group block bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300">
                     <div class="aspect-video bg-linear-to-br from-gray-200 to-gray-300 overflow-hidden">
-                        <img src="{{article.coverImageUrl}}" alt="Artigo {{article.title}}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        @if (article.coverImageUrl) {
+                            <img [src]="article.coverImageUrl" alt="Artigo {{article.title}}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" (error)="hideBrokenImage($event)">
+                        }
                     </div>
                     <div class="p-6">
                         <div class="flex items-center gap-3 mb-3">

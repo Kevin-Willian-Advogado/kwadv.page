@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
+
+import { ArticleCategory, ArticleData } from '@core/articles/articles.service';
 
 @Component({
   selector: 'app-articles',
@@ -8,41 +12,69 @@ import { DatePipe } from '@angular/common';
   styleUrl: './articles.css',
 })
 export class Articles {
-searchQuery: string = '';
-  onSearch(value: string) { this.searchQuery = value.trim(); }
+  private readonly route = inject(ActivatedRoute);
+  private readonly routeData = toSignal(this.route.data, { initialValue: this.route.snapshot.data });
 
-  get featuredArticles() {
-    return this.allArticles.filter(a => a.highlights).slice(0, 3);
+  searchQuery = '';
+  selectedCategory = 'Todas';
+  currentBannerIndex = 0;
+
+  onSearch(value: string): void {
+    this.searchQuery = value.trim();
   }
 
-  currentBannerIndex: number = 0;
-
-  nextBanner() {
-    this.currentBannerIndex = (this.currentBannerIndex + 1) % this.featuredArticles.length;
+  get allArticles(): ArticleData[] {
+    return (this.routeData()['articles'] as ArticleData[] | undefined) ?? [];
   }
 
-  prevBanner() {
-    this.currentBannerIndex = (this.currentBannerIndex - 1 + this.featuredArticles.length) % this.featuredArticles.length;
+  get featuredArticles(): ArticleData[] {
+    return this.allArticles.filter((article) => article.highlights).slice(0, 3);
   }
 
-  selectedCategory: string = 'Todas';
-  categories: string[] = ['Todas', 'Trabalhista', 'Previdenciário', 'Tecnologia'];
+  get allCategories(): ArticleCategory[] {
+    return (this.routeData()['categories'] as ArticleCategory[] | undefined) ?? [];
+  }
 
-  get filteredArticles() {
-    return this.allArticles.filter(article => {
-      const matchesCategory = this.selectedCategory === 'Todas' || article.categoryName === this.selectedCategory;
-      const matchesSearch = article.title.toLowerCase().includes(this.searchQuery.toLowerCase());
+  get categories(): string[] {
+    const dynamicCategories = Array.from(new Set([
+      ...this.allCategories.map((category) => category.name),
+      ...this.allArticles.map((article) => article.categoryName),
+    ].filter((category) => !!category)));
+
+    return ['Todas', ...dynamicCategories];
+  }
+
+  get filteredArticles(): ArticleData[] {
+    const normalizedSearch = this.searchQuery.toLowerCase();
+
+    return this.allArticles.filter((article) => {
+      const matchesCategory =
+        this.selectedCategory === 'Todas' || article.categoryName === this.selectedCategory;
+      const matchesSearch = article.title.toLowerCase().includes(normalizedSearch);
       return matchesCategory && matchesSearch;
     });
   }
 
-  allArticles: any[] = [] 
-  
-  // private api = inject(ArticleService);
+  nextBanner(): void {
+    const total = this.featuredArticles.length;
+    if (total === 0) {
+      return;
+    }
 
-  // ngOnInit() {
-  //   this.api.getAll().subscribe(res => {
-  //     this.allArticles = res;
-  //   });
-  // }
+    this.currentBannerIndex = (this.currentBannerIndex + 1) % total;
+  }
+
+  prevBanner(): void {
+    const total = this.featuredArticles.length;
+    if (total === 0) {
+      return;
+    }
+
+    this.currentBannerIndex = (this.currentBannerIndex - 1 + total) % total;
+  }
+
+  hideBrokenImage(event: Event): void {
+    const image = event.target as HTMLImageElement | null;
+    image?.classList.add('hidden');
+  }
 }

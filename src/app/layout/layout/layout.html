@@ -1,56 +1,98 @@
-<header class="fixed top-0 w-full bg-white/80 backdrop-blur-md shadow-md z-50">
-    <div class="md:w-8/10 md:max-w-[1200px] mx-auto px-8 md:px-0 py-4 flex items-center justify-between">
-        <a routerLink="/#inicio" class="flex items-center gap-3">
-            <img src="logos/logo-1.svg" alt="Logo da Kevin Willian Advogado" class="h-10 hover:scale-105 transition-transform" />
+<header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-xl shadow-lg py-3">
+    <div class="md:w-8/10 md:max-w-[1200px] mx-auto px-6 md:px-0 flex items-center justify-between">
+        <a href="/#inicio" class="relative block h-12 w-12 md:h-[60px] md:w-[260px] overflow-hidden">
+            <img
+                src="logos/logo-1.svg"
+                alt="Logo Kevin Willian Completa"
+                class="hidden md:block absolute inset-0 w-full h-full object-contain transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                [ngClass]="isScrolled ? 'opacity-0 -translate-x-12 pointer-events-none' : 'opacity-100 translate-x-0'"
+            />
+
+            <img
+                src="logos/logo-4.svg"
+                alt="Ícone Kevin Willian"
+                class="absolute left-0 inset-y-0 h-full w-12 md:w-[60px] object-contain transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                [ngClass]="isScrolled ? 'opacity-100 translate-x-0' : 'opacity-100 translate-x-0 md:opacity-0 md:translate-x-6'"
+            />
         </a>
 
-        <button class="md:hidden text-(--color-4)" (click)="menuAberto = !menuAberto">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <button
+            class="md:hidden relative z-50 grid h-11 w-11 place-items-center text-(--color-4) hover:text-(--color-1) transition-colors"
+            type="button"
+            [attr.aria-label]="menuAberto ? 'Fechar menu' : 'Abrir menu'"
+            [attr.aria-expanded]="menuAberto"
+            (click)="toggleMenu()"
+        >
+            @if (!menuAberto) {
+                <svg class="w-7 h-7 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            } @else {
+                <svg class="w-7 h-7 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            }
         </button>
 
-        <nav class="hidden md:flex items-center gap-5 text-[15px] font-medium">
-            <a href="/#inicio" class="text-(--color-4) hover:text-(--color-1)">Início</a>
-            <a href="/#sobre" class="text-(--color-4) hover:text-(--color-1)">Sobre</a>
-            <a href="#servicos" class="text-(--color-4) hover:text-(--color-1)">Áreas</a>
-            <a href="/artigos" class="text-(--color-4) hover:text-(--color-1)">Artigos</a>
-            <a href="#contato" class="text-(--color-4) hover:text-(--color-1)">Contato</a>
+        <nav class="hidden md:flex items-center gap-8 text-[15px] font-medium">
+            <a href="/#inicio" class="text-(--color-4) hover:text-[#273F4B] transition-colors">Início</a>
+            <a href="/#sobre" class="text-(--color-4) hover:text-[#273F4B] transition-colors">Sobre</a>
+            <a href="/#servicos" class="text-(--color-4) hover:text-[#273F4B] transition-colors">Áreas</a>
+            <a href="/artigos" class="text-(--color-4) hover:text-[#273F4B] transition-colors">Artigos</a>
+            <a href="/#contato" class="text-(--color-4) hover:text-[#273F4B] transition-colors">Contato</a>
 
-            <a target="_blank" class="ml-5 flex items-center gap-2 bg-(--color-1) text-(--color-2) px-5 py-2.5 rounded-md font-semibold hover:bg-(--color-1)/80">
+            <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer"
+               class="ml-2 flex items-center gap-2 bg-[#273F4B] text-white rounded-md font-semibold hover:bg-[#3C5562] transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 px-5 py-2.5 text-sm">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M16.5562 12.9062L16.1007 13.359C16.1007 13.359 15.0181 14.4355 12.0631 11.4972C9.10812 8.55901 10.1907 7.48257 10.1907 7.48257L10.4775 7.19738C11.1841 6.49484 11.2507 5.36691 10.6342 4.54348L9.37326 2.85908C8.61028 1.83992 7.13596 1.70529 6.26145 2.57483L4.69185 4.13552C4.25823 4.56668 3.96765 5.12559 4.00289 5.74561C4.09304 7.33182 4.81071 10.7447 8.81536 14.7266C13.0621 18.9492 17.0468 19.117 18.6763 18.9651C19.1917 18.9171 19.6399 18.6546 20.0011 18.2954L21.4217 16.883C22.3806 15.9295 22.1102 14.2949 20.8833 13.628L18.9728 12.5894C18.1672 12.1515 17.1858 12.2801 16.5562 12.9062Z"/></svg>
                 Atendimento Online
             </a>
         </nav>
     </div>
-    @if(menuAberto) {
-        <nav class="flex md:hidden flex-col bg-white shadow-md animate-fade-down">
-            <a routerLink="/#inicio" class="px-6 py-3 border-b border-gray-100 text-(--color-4)">Início</a>
-            <a routerLink="/#sobre" class="px-6 py-3 border-b border-gray-100 text-(--color-4)">Sobre</a>
-            <a href="#servicos" class="px-6 py-3 border-b border-gray-100 text-(--color-4)">Áreas</a>
-            <a routerLink="/artigos" class="px-6 py-3 border-b border-gray-100 text-(--color-4)">Artigos</a>
-            <a href="#contato" class="px-6 py-3 border-b border-gray-100 text-(--color-4)">Contato</a>
-            <a target="_blank" class="px-6 py-3 flex items-center gap-2 bg-(--color-1) text-(--color-2)">Atendimento Online</a>
-        </nav>
-    }
-    
 </header>
+
+@if(menuAberto) {
+    <div class="fixed inset-x-0 top-[72px] bottom-0 z-40 bg-[#273F4B] text-white flex flex-col justify-center animate-fade-in md:hidden">
+        <div class="px-8 w-full max-w-sm mx-auto flex flex-col gap-8 text-center">
+            <nav class="flex flex-col gap-6 text-2xl font-light tracking-wide">
+                <a href="/#inicio" (click)="fecharMenu()" class="hover:text-(--color-2) transition-colors">Início</a>
+                <a href="/#sobre" (click)="fecharMenu()" class="hover:text-(--color-2) transition-colors">Sobre o Advogado</a>
+                <a href="/#servicos" (click)="fecharMenu()" class="hover:text-(--color-2) transition-colors">Áreas de Atuação</a>
+                <a href="/artigos" (click)="fecharMenu()" class="hover:text-(--color-2) transition-colors">Artigos</a>
+                <a href="/#contato" (click)="fecharMenu()" class="hover:text-(--color-2) transition-colors">Contato</a>
+            </nav>
+
+            <div class="w-12 h-[1px] bg-white/20 mx-auto my-4"></div>
+
+            <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer"
+               class="bg-white text-[#273F4B] px-8 py-4 rounded-md font-bold text-lg flex items-center justify-center gap-3 hover:bg-gray-100 transition-colors shadow-lg">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M16.5562 12.9062L16.1007 13.359C16.1007 13.359 15.0181 14.4355 12.0631 11.4972C9.10812 8.55901 10.1907 7.48257 10.1907 7.48257L10.4775 7.19738C11.1841 6.49484 11.2507 5.36691 10.6342 4.54348L9.37326 2.85908C8.61028 1.83992 7.13596 1.70529 6.26145 2.57483L4.69185 4.13552C4.25823 4.56668 3.96765 5.12559 4.00289 5.74561C4.09304 7.33182 4.81071 10.7447 8.81536 14.7266C13.0621 18.9492 17.0468 19.117 18.6763 18.9651C19.1917 18.9171 19.6399 18.6546 20.0011 18.2954L21.4217 16.883C22.3806 15.9295 22.1102 14.2949 20.8833 13.628L18.9728 12.5894C18.1672 12.1515 17.1858 12.2801 16.5562 12.9062Z"/></svg>
+                Falar com Advogado
+            </a>
+        </div>
+
+        <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+    </div>
+}
+
 <main>
     <router-outlet></router-outlet>
 </main>
+
 <footer class="bg-(--color-1) text-white">
     <div class="md:w-8/10 md:max-w-[1200px] mx-auto px-8 md:px-0 py-16 flex flex-col md:flex-row gap-12 md:gap-20">
         <div class="flex-1 flex flex-col justify-center md:justify-start">
-            <a href="#inicio" class="flex flex-col w-full items-center md:items-start">
+            <a href="/#inicio" class="flex flex-col w-full items-center md:items-start">
                 <img src="logos/logo-2.svg" alt="Logo da Kevin Willian Advogado" class="w-56 md:w-64 transition-transform hover:scale-105">
             </a>
         </div>
         <div class="flex-1">
             <h4 class="text-lg font-semibold mb-4">Links Rápidos</h4>
             <nav class="space-y-2 text-sm">
-                <button class="block text-(--color-2) hover:text-(--color-5)">Início</button>
-                <button class="block text-(--color-2) hover:text-(--color-5)">Sobre o Advogado</button>
-                <button class="block text-(--color-2) hover:text-(--color-5)">Áreas de Atuação</button>
-                <button class="block text-(--color-2) hover:text-(--color-5)">Blog Jurídico</button>
-                <button class="block text-(--color-2) hover:text-(--color-5)">Contato</button>
+                <a href="/#inicio" class="block text-(--color-2) hover:text-(--color-5)">Início</a>
+                <a href="/#sobre" class="block text-(--color-2) hover:text-(--color-5)">Sobre o Advogado</a>
+                <a href="/#servicos" class="block text-(--color-2) hover:text-(--color-5)">Áreas de Atuação</a>
+                <a href="/artigos" class="block text-(--color-2) hover:text-(--color-5)">Blog Jurídico</a>
+                <a href="/#contato" class="block text-(--color-2) hover:text-(--color-5)">Contato</a>
             </nav>
         </div>
         <div class="flex-1">
@@ -58,7 +100,7 @@
             <div class="space-y-2 text-sm">
                 <div>
                     <p class="text-(--color-5)">Telefone / WhatsApp</p>
-                    <a href="https://wa.me/5511999999999" target="_blank" class="hover:text-(--color-5)">(11) 99999-9999</a>
+                    <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" class="hover:text-(--color-5)">(11) 99999-9999</a>
                 </div>
                 <div>
                     <p class="text-(--color-5)">E-mail</p>
@@ -66,13 +108,13 @@
                 </div>
                 <div>
                     <p class="text-(--color-5)">Instagram</p>
-                    <a href="#" target="_blank" class="hover:text-(--color-5)">@kevinwillian.adv</a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="hover:text-(--color-5)">@kevinwillian.adv</a>
                 </div>
                 <div>
                     <p class="text-(--color-5)">Linkedin</p>
                     <a href="#" class="hover:text-(--color-5)">www.linkedin.com/in/kevinwillian.adv</a>
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
     <div class="border-t border-white/20 py-6">

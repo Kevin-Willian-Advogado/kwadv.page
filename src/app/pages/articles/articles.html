@@ -1,53 +1,58 @@
 <main class="p-8 min-h-screen bg-gray-50/50 font-sans pt-25">
     <div class="max-w-300 mx-auto">
         
-        <section class="relative rounded-2xl overflow-hidden bg-[#111827] h-100 shadow-lg group">
-            @for (item of featuredArticles; track item.slug; let i = $index) {
-                <div [class.opacity-100]="currentBannerIndex === i" 
-                     [class.opacity-0]="currentBannerIndex !== i"
-                     class="absolute inset-0 transition-opacity duration-1000 ease-in-out">
-                    
-                    <div class="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent z-10"></div>
-                    
-                    <img [src]="item.coverImageUrl" class="w-full h-full object-cover" [alt]="item.title">
-                    
-                    <div class="absolute inset-0 z-20 p-12 flex flex-col justify-center max-w-2xl">
-                        <span class="text-[#273F4B] bg-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider w-fit mb-4">
-                            {{ item.categoryName }}
-                        </span>
-                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
-                            {{ item.title }}
-                        </h2>
-                        <p class="text-gray-300 text-sm md:text-base mb-6 line-clamp-2 font-light">
-                            {{ item.metaDescription }}
-                        </p>
-                        <a href="artigo/{{ item.slug }}" class="w-fit px-6 py-3 bg-[#273F4B] text-white text-sm font-bold rounded-lg hover:bg-[#1a2b34] transition-all">
-                            Ler Artigo Completo
-                        </a>
+        @if (featuredArticles.length > 0) {
+            <section class="relative rounded-2xl overflow-hidden bg-[#111827] h-100 shadow-lg group">
+                @for (item of featuredArticles; track item.slug; let i = $index) {
+                    <div [class.opacity-100]="currentBannerIndex === i" 
+                         [class.opacity-0]="currentBannerIndex !== i"
+                         class="absolute inset-0 transition-opacity duration-1000 ease-in-out">
+                        
+                        <div class="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent z-10"></div>
+                        
+                        @if (item.coverImageUrl) {
+                            <img [src]="item.coverImageUrl" class="w-full h-full object-cover" [alt]="item.title" (error)="hideBrokenImage($event)">
+                        }
+                        
+                        <div class="absolute inset-0 z-20 p-12 flex flex-col justify-center max-w-2xl">
+                            <span class="text-[#273F4B] bg-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider w-fit mb-4">
+                                {{ item.categoryName }}
+                            </span>
+                            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
+                                {{ item.title }}
+                            </h2>
+                            <p class="text-gray-300 text-sm md:text-base mb-6 line-clamp-2 font-light">
+                                {{ item.metaDescription }}
+                            </p>
+                            <a href="/artigo/{{ item.slug }}" class="w-fit px-6 py-3 bg-[#273F4B] text-white text-sm font-bold rounded-lg hover:bg-[#1a2b34] transition-all">
+                                Ler Artigo Completo
+                            </a>
+                        </div>
+                    </div>
+                }
+
+                <div class="absolute bottom-6 right-12 z-30 flex items-center gap-4">
+                    <div class="flex gap-2">
+                        @for (dot of featuredArticles; track $index; let i = $index) {
+                            <button type="button" (click)="currentBannerIndex = i" 
+                                    [class.w-8]="currentBannerIndex === i"
+                                    [class.bg-white]="currentBannerIndex === i"
+                                    [class.bg-white/40]="currentBannerIndex !== i"
+                                    class="h-1.5 w-4 rounded-full transition-all duration-300"
+                                    aria-label="Selecionar artigo em destaque"></button>
+                        }
+                    </div>
+                    <div class="flex gap-1 ml-4">
+                        <button type="button" (click)="prevBanner()" class="p-2 text-white/50 hover:text-white transition-colors" aria-label="Artigo anterior">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                        </button>
+                        <button type="button" (click)="nextBanner()" class="p-2 text-white/50 hover:text-white transition-colors" aria-label="Próximo artigo">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </button>
                     </div>
                 </div>
-            }
-
-            <div class="absolute bottom-6 right-12 z-30 flex items-center gap-4">
-                <div class="flex gap-2">
-                    @for (dot of featuredArticles; track $index; let i = $index) {
-                        <button (click)="currentBannerIndex = i" 
-                                [class.w-8]="currentBannerIndex === i"
-                                [class.bg-white]="currentBannerIndex === i"
-                                [class.bg-white/40]="currentBannerIndex !== i"
-                                class="h-1.5 w-4 rounded-full transition-all duration-300"></button>
-                    }
-                </div>
-                <div class="flex gap-1 ml-4">
-                    <button (click)="prevBanner()" class="p-2 text-white/50 hover:text-white transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                    </button>
-                    <button (click)="nextBanner()" class="p-2 text-white/50 hover:text-white transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                    </button>
-                </div>
-            </div>
-        </section>
+            </section>
+        }
 
         <div class="flex flex-col lg:flex-row gap-8">
             </div>
@@ -67,8 +72,10 @@
                         <article class="group flex flex-col sm:flex-row bg-white border border-gray-100 rounded-xl overflow-hidden hover:border-[#273F4B]/30 hover:shadow-md transition-all duration-300">
                             
                             <div class="sm:w-56 h-48 sm:h-auto overflow-hidden bg-gray-100">
-                                <img [src]="article.coverImageUrl" [alt]="article.title" 
-                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                @if (article.coverImageUrl) {
+                                    <img [src]="article.coverImageUrl" [alt]="article.title" 
+                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" (error)="hideBrokenImage($event)">
+                                }
                             </div>
 
                             <div class="flex-1 p-6 flex flex-col">
@@ -87,7 +94,7 @@
                                     {{ article.metaDescription }}
                                 </p>
 
-                                    <a href="artigo/{{ article.slug }}" class="text-sm font-bold text-[#273F4B] hover:underline flex items-center gap-1">
+                                    <a href="/artigo/{{ article.slug }}" class="text-sm font-bold text-[#273F4B] hover:underline flex items-center gap-1">
                                         Ler mais
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                                     </a>
