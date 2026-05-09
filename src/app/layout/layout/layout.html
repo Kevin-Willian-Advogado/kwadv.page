@@ -91,28 +91,28 @@
         </div>
 
         <div class="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-8 px-6 pb-8 text-center sm:px-8">
-            <a href="/#inicio" (click)="fecharMenu()" class="mx-auto block w-full max-w-[280px]">
+            <a href="/#inicio" (click)="navegarParaSecao($event, 'inicio')" class="mx-auto block w-full max-w-[280px]">
                 <img src="logos/logo-2.svg" alt="Logo da Kevin Willian Advogado" class="h-auto w-full object-contain">
             </a>
 
             <nav class="flex flex-col divide-y divide-white/10 border-y border-white/10 text-left">
-                <a href="/#inicio" (click)="fecharMenu()" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
+                <a href="/#inicio" (click)="navegarParaSecao($event, 'inicio')" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
                     Início
                 </a>
 
-                <a href="/#sobre" (click)="fecharMenu()" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
+                <a href="/#sobre" (click)="navegarParaSecao($event, 'sobre')" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
                     Sobre o Advogado
                 </a>
 
-                <a href="/#servicos" (click)="fecharMenu()" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
+                <a href="/#servicos" (click)="navegarParaSecao($event, 'servicos')" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
                     Áreas de Atuação
                 </a>
 
-                <a href="/artigos" (click)="fecharMenu()" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
+                <a href="/artigos" (click)="navegarParaArtigos($event)" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
                     Artigos
                 </a>
 
-                <a href="/#contato" (click)="fecharMenu()" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
+                <a href="/#contato" (click)="navegarParaSecao($event, 'contato')" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
                     Contato
                 </a>
             </nav>

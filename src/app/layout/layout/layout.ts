@@ -1,6 +1,6 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, ViewportScroller, isPlatformBrowser } from '@angular/common';
 import { Component, HostListener, OnInit, PLATFORM_ID, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
@@ -12,6 +12,8 @@ export class Layout implements OnInit {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly whatsappBubbleStorageKey = 'kwadv.whatsappBubbleClosed';
+  private readonly router = inject(Router);
+  private readonly viewportScroller = inject(ViewportScroller);
 
   menuAberto = false;
   isScrolled = false;
@@ -51,6 +53,26 @@ export class Layout implements OnInit {
   fecharMenu() {
     this.menuAberto = false;
     document.body.style.overflow = 'auto';
+  }
+
+  navegarParaSecao(event: Event, fragment: string) {
+    event.preventDefault();
+    this.fecharMenu();
+
+    if (!this.isBrowser) {
+      return;
+    }
+
+    void this.router.navigate(['/'], { fragment }).then(() => {
+      window.setTimeout(() => this.viewportScroller.scrollToAnchor(fragment));
+    });
+  }
+
+  navegarParaArtigos(event: Event) {
+    event.preventDefault();
+    this.fecharMenu();
+
+    void this.router.navigate(['/artigos']);
   }
 
   fecharWhatsappBubble() {
