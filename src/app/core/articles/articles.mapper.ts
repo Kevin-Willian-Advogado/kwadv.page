@@ -50,7 +50,7 @@ function mapArticle(
   const relatedArticles = (row.article_related ?? [])
     .map((item) => item.articles)
     .filter((related): related is SupabaseArticleRow => !!related)
-    .filter(isPublicationEligibleArticleRow)
+    .filter(isPublishedArticleRow)
     .map((related) => mapArticleWithoutRelations(related, categoryNameById))
     .filter((article) => article.slug.length > 0);
 
@@ -156,4 +156,8 @@ function isPublicationEligibleArticleRow(row: SupabaseArticleRow): boolean {
     (row.status === PUBLISHED_ARTICLE_STATUS || row.status === PROCESSING_ARTICLE_STATUS) &&
     !!normalizeDate(row.published_at)
   );
+}
+
+function isPublishedArticleRow(row: SupabaseArticleRow): boolean {
+  return row.status === PUBLISHED_ARTICLE_STATUS && !!normalizeDate(row.published_at);
 }

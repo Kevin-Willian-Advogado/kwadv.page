@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 
 const SUPABASE_BASE_URL = 'https://wwwntzwmvjvivputmlqg.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_EREcwSKRXkRIRknqHOMh0g_FyIU7He0';
+const SUPABASE_SERVICE_ROLE_KEY = process.env['SUPABASE_SERVICE_ROLE_KEY']?.trim() ?? '';
+const REQUESTED_PUBLICATION_ARTICLE_ID = parsePositiveInteger(process.env['PUBLICATION_ARTICLE_ID']);
+const PUBLISHED_ARTICLE_STATUS = 'eq.1';
 const PUBLICATION_ELIGIBLE_ARTICLE_STATUS = '(status.eq.1,status.eq.0)';
 const ARTICLES_SELECT =
   '*,authors(*),article_related!fk_article_related_links_articles_article_id(articles!fk_article_related_links_articles_related_articles_id(*))';
@@ -45,13 +48,17 @@ export interface SupabaseCategoryRow {
   providedIn: 'root',
 })
 export class ArticlesSupabaseApi {
-  getArticles(): Promise<SupabaseArticleRow[]> {
-    return this.request<SupabaseArticleRow[]>('/rest/v1/articles', {
+  async getArticles(): Promise<SupabaseArticleRow[]> {
+    const publishedArticles = await this.request<SupabaseArticleRow[]>('/rest/v1/articles', {
       select: ARTICLES_SELECT,
-      or: PUBLICATION_ELIGIBLE_ARTICLE_STATUS,
+      status: PUBLISHED_ARTICLE_STATUS,
       published_at: 'not.is.null',
       order: 'published_at.desc',
     });
+
+    const requestedPublicationArticles = await this.getRequestedPublicationArticles();
+
+    return this.mergeArticlesById(publishedArticles, requestedPublicationArticles);
   }
 
   getCategories(): Promise<SupabaseCategoryRow[]> {
@@ -62,14 +69,16 @@ export class ArticlesSupabaseApi {
 
   private async request<T>(path: string, query: Record<string, string>): Promise<T> {
     const url = new URL(path, SUPABASE_BASE_URL);
+    const apiKey = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_PUBLISHABLE_KEY;
+
     for (const [key, value] of Object.entries(query)) {
       url.searchParams.set(key, value);
     }
 
     const response = await fetch(url.toString(), {
       headers: {
-        apikey: SUPABASE_PUBLISHABLE_KEY,
-        Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+        apikey: apiKey,
+        Authorization: `Bearer ${apiKey}`,
       },
     });
 
@@ -81,6 +90,33 @@ export class ArticlesSupabaseApi {
     }
 
     return (await response.json()) as T;
+  }
+
+  private getRequestedPublicationArticles(): Promise<SupabaseArticleRow[]> {
+    if (REQUESTED_PUBLICATION_ARTICLE_ID === null) {
+      return Promise.resolve([]);
+    }
+
+    return this.request<SupabaseArticleRow[]>('/rest/v1/articles', {
+      select: ARTICLES_SELECT,
+      id: `eq.${REQUESTED_PUBLICATION_ARTICLE_ID}`,
+      or: PUBLICATION_ELIGIBLE_ARTICLE_STATUS,
+      published_at: 'not.is.null',
+      limit: '1',
+    });
+  }
+
+  private mergeArticlesById(
+    publishedArticles: SupabaseArticleRow[],
+    requestedPublicationArticles: SupabaseArticleRow[],
+  ): SupabaseArticleRow[] {
+    const articlesById = new Map<number, SupabaseArticleRow>();
+
+    for (const article of [...publishedArticles, ...requestedPublicationArticles]) {
+      articlesById.set(article.id, article);
+    }
+
+    return Array.from(articlesById.values());
   }
 
   private async readErrorDetails(response: Response): Promise<string> {
@@ -97,4 +133,13 @@ export class ArticlesSupabaseApi {
       return '';
     }
   }
+}
+
+function parsePositiveInteger(value: string | undefined): number | null {
+  if (typeof value !== 'string') {
+    return null;
+  }
+
+  const parsed = Number(value.trim());
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
 }

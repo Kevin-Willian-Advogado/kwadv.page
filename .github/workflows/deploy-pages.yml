@@ -131,6 +131,9 @@ jobs:
           PY
 
       - name: Build static site
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          PUBLICATION_ARTICLE_ID: ${{ inputs.article_id }}
         run: npm run build
 
       - name: Validate requested article route
