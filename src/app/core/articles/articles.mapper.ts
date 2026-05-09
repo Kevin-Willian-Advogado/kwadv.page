@@ -7,6 +7,7 @@ import {
 
 const DEFAULT_CATEGORY_NAME = 'Geral';
 const PUBLISHED_ARTICLE_STATUS = 1;
+const PROCESSING_ARTICLE_STATUS = 0;
 
 export function mapCategories(rows: SupabaseCategoryRow[]): ArticleCategory[] {
   const categoryNameById = new Map<number, string>();
@@ -36,7 +37,7 @@ export function mapArticles(
   categoryNameById: ReadonlyMap<number, string>,
 ): ArticleData[] {
   return rows
-    .filter(isPublishedArticleRow)
+    .filter(isPublicationEligibleArticleRow)
     .map((row) => mapArticle(row, categoryNameById))
     .filter((article): article is ArticleData => article.slug.length > 0)
     .sort(sortByPublishedAtDesc);
@@ -49,7 +50,7 @@ function mapArticle(
   const relatedArticles = (row.article_related ?? [])
     .map((item) => item.articles)
     .filter((related): related is SupabaseArticleRow => !!related)
-    .filter(isPublishedArticleRow)
+    .filter(isPublicationEligibleArticleRow)
     .map((related) => mapArticleWithoutRelations(related, categoryNameById))
     .filter((article) => article.slug.length > 0);
 
@@ -150,6 +151,9 @@ function normalizeDate(value: string | null): Date | null {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
-function isPublishedArticleRow(row: SupabaseArticleRow): boolean {
-  return row.status === PUBLISHED_ARTICLE_STATUS && !!normalizeDate(row.published_at);
+function isPublicationEligibleArticleRow(row: SupabaseArticleRow): boolean {
+  return (
+    (row.status === PUBLISHED_ARTICLE_STATUS || row.status === PROCESSING_ARTICLE_STATUS) &&
+    !!normalizeDate(row.published_at)
+  );
 }

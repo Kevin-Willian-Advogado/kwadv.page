@@ -1,10 +1,35 @@
-name: Deploy to GitHub Pages
+name: Deploy static site
 
 on:
   push:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      article_id:
+        description: Article id to finalize after a successful deploy.
+        required: false
+        type: string
+      article_slug:
+        description: Article slug used only for traceability in the workflow run.
+        required: false
+        type: string
+      article_updated_at:
+        description: Article updated_at value expected when finalizing publication.
+        required: false
+        type: string
+      publication_action:
+        description: Publication action requested by the CMS.
+        required: false
+        default: publish
+        type: choice
+        options:
+          - publish
+          - unpublish
+      actor_id:
+        description: CMS user id that requested the publication.
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -32,7 +57,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build static site
         run: npm run build
 
       - name: Configure Pages
@@ -46,11 +71,67 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Finalize article publication status
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.article_id != '' }}
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          ARTICLE_ID: ${{ inputs.article_id }}
+          ARTICLE_UPDATED_AT: ${{ inputs.article_updated_at }}
+          PUBLICATION_ACTION: ${{ inputs.publication_action }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${SUPABASE_URL}" ] || [ -z "${SUPABASE_SERVICE_ROLE_KEY}" ]; then
+            echo "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY secrets are required."
+            exit 1
+          fi
+
+          if [ "${PUBLICATION_ACTION}" = "unpublish" ]; then
+            payload='{"status":2,"published_at":null,"published_by":null}'
+          else
+            payload='{"status":1}'
+          fi
+
+          query="$(python3 - <<'PY'
+          import os
+          import urllib.parse
+
+          params = {"id": f"eq.{os.environ['ARTICLE_ID']}"}
+          updated_at = os.environ.get("ARTICLE_UPDATED_AT", "").strip()
+          if updated_at:
+              params["updated_at"] = f"eq.{updated_at}"
+
+          print(urllib.parse.urlencode(params))
+          PY
+          )"
+
+          response="$(curl --silent --show-error --fail-with-body \
+            --request PATCH \
+            --url "${SUPABASE_URL}/rest/v1/articles?${query}" \
+            --header "apikey: ${SUPABASE_SERVICE_ROLE_KEY}" \
+            --header "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+            --header "Content-Type: application/json" \
+            --header "Prefer: return=representation" \
+            --data "${payload}")"
+
+          PATCH_RESPONSE="${response}" python3 - <<'PY'
+          import json
+          import os
+          import sys
+
+          rows = json.loads(os.environ.get("PATCH_RESPONSE", "[]"))
+          if not isinstance(rows, list) or len(rows) == 0:
+              print("No article row was finalized. It may have been edited after this workflow was queued.", file=sys.stderr)
+              sys.exit(1)
+          PY
