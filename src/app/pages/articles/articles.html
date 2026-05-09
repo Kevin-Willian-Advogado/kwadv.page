@@ -1,37 +1,41 @@
-<main class="p-8 min-h-screen bg-gray-50/50 font-sans pt-25">
-    <div class="max-w-300 mx-auto">
+<main class="min-h-screen bg-gray-50/50 px-6 py-8 pt-25 font-sans sm:px-8">
+    <div class="mx-auto max-w-300">
         
         @if (featuredArticles.length > 0) {
-            <section class="relative rounded-2xl overflow-hidden bg-[#111827] h-100 shadow-lg group">
+            <section class="group relative min-h-[430px] overflow-hidden rounded-xl bg-[#111827] shadow-lg sm:rounded-2xl md:h-100 md:min-h-0">
                 @for (item of featuredArticles; track item.slug; let i = $index) {
-                    <div [class.opacity-100]="currentBannerIndex === i" 
+                    <a href="/artigo/{{ item.slug }}"
+                         aria-label="Ler artigo: {{ item.title }}"
+                         [class.opacity-100]="currentBannerIndex === i"
                          [class.opacity-0]="currentBannerIndex !== i"
-                         class="absolute inset-0 transition-opacity duration-1000 ease-in-out">
+                         [class.pointer-events-auto]="currentBannerIndex === i"
+                         [class.pointer-events-none]="currentBannerIndex !== i"
+                         class="absolute inset-0 block transition-opacity duration-1000 ease-in-out">
                         
-                        <div class="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent z-10"></div>
+                        <div class="absolute inset-0 z-10 bg-linear-to-t from-black/85 via-black/55 to-black/20 md:bg-linear-to-r md:from-black/80 md:via-black/40 md:to-transparent"></div>
                         
                         @if (item.coverImageUrl) {
                             <img [src]="item.coverImageUrl" class="w-full h-full object-cover" [alt]="item.title" (error)="hideBrokenImage($event)">
                         }
                         
-                        <div class="absolute inset-0 z-20 p-12 flex flex-col justify-center max-w-2xl">
+                        <div class="absolute inset-0 z-20 flex max-w-2xl flex-col justify-end p-6 pb-24 sm:p-8 sm:pb-24 md:justify-center md:p-12">
                             <span class="text-[#273F4B] bg-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider w-fit mb-4">
                                 {{ item.categoryName }}
                             </span>
-                            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
+                            <h2 class="mb-4 text-2xl font-bold leading-snug text-white text-balance sm:text-3xl md:text-4xl md:leading-tight">
                                 {{ item.title }}
                             </h2>
-                            <p class="text-gray-300 text-sm md:text-base mb-6 line-clamp-2 font-light">
+                            <p class="mb-6 line-clamp-3 text-sm font-light leading-relaxed text-gray-300 sm:line-clamp-2 md:text-base">
                                 {{ item.metaDescription }}
                             </p>
-                            <a href="/artigo/{{ item.slug }}" class="w-fit px-6 py-3 bg-[#273F4B] text-white text-sm font-bold rounded-lg hover:bg-[#1a2b34] transition-all">
+                            <span class="inline-flex w-fit items-center rounded-lg bg-[#273F4B] px-5 py-3 text-sm font-bold text-white transition-all group-hover:bg-[#1a2b34] sm:px-6">
                                 Ler Artigo Completo
-                            </a>
+                            </span>
                         </div>
-                    </div>
+                    </a>
                 }
 
-                <div class="absolute bottom-6 right-12 z-30 flex items-center gap-4">
+                <div class="absolute bottom-5 left-6 right-6 z-30 flex items-center justify-between gap-4 md:bottom-6 md:left-auto md:right-12 md:justify-end">
                     <div class="flex gap-2">
                         @for (dot of featuredArticles; track $index; let i = $index) {
                             <button type="button" (click)="currentBannerIndex = i" 
@@ -42,7 +46,7 @@
                                     aria-label="Selecionar artigo em destaque"></button>
                         }
                     </div>
-                    <div class="flex gap-1 ml-4">
+                    <div class="ml-4 flex gap-1">
                         <button type="button" (click)="prevBanner()" class="p-2 text-white/50 hover:text-white transition-colors" aria-label="Artigo anterior">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                         </button>
@@ -54,10 +58,8 @@
             </section>
         }
 
-        <div class="flex flex-col lg:flex-row gap-8">
-            </div>
     </div>
-    <div class="max-w-300 mx-auto pt-10">
+    <div class="mx-auto max-w-300 pt-10">
         
         <header class="mb-10">
             <h1 class="text-2xl font-bold text-gray-800 tracking-tight">Artigos</h1>
@@ -66,20 +68,21 @@
 
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <div class="flex-1 order-2 lg:order-1">
+            <div class="order-2 flex-1 lg:order-1">
                 <div class="grid gap-4">
                     @for (article of filteredArticles; track article.slug) {
-                        <article class="group flex flex-col sm:flex-row bg-white border border-gray-100 rounded-xl overflow-hidden hover:border-[#273F4B]/30 hover:shadow-md transition-all duration-300">
+                        <article>
+                            <a href="/artigo/{{ article.slug }}" class="group flex flex-col overflow-hidden rounded-xl border border-gray-100 bg-white transition-all duration-300 hover:border-[#273F4B]/30 hover:shadow-md sm:flex-row">
                             
-                            <div class="sm:w-56 h-48 sm:h-auto overflow-hidden bg-gray-100">
+                            <div class="h-48 overflow-hidden bg-gray-100 sm:h-auto sm:w-56 sm:shrink-0">
                                 @if (article.coverImageUrl) {
                                     <img [src]="article.coverImageUrl" [alt]="article.title" 
                                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" (error)="hideBrokenImage($event)">
                                 }
                             </div>
 
-                            <div class="flex-1 p-6 flex flex-col">
-                                <div class="flex items-center gap-3 mb-2">
+                            <div class="flex flex-1 flex-col p-5 sm:p-6">
+                                <div class="mb-2 flex flex-wrap items-center gap-2 sm:gap-3">
                                     <span class="px-2 py-0.5 text-[10px] uppercase font-bold bg-[#273F4B]/5 text-[#273F4B] rounded-full">
                                         {{ article.categoryName }}
                                     </span>
@@ -94,11 +97,12 @@
                                     {{ article.metaDescription }}
                                 </p>
 
-                                    <a href="/artigo/{{ article.slug }}" class="text-sm font-bold text-[#273F4B] hover:underline flex items-center gap-1">
+                                    <span class="mt-auto flex items-center gap-1 text-sm font-bold text-[#273F4B] group-hover:underline">
                                         Ler mais
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                                    </a>
+                                    </span>
                             </div>
+                            </a>
                         </article>
                     }
 
@@ -110,15 +114,68 @@
                 </div>
             </div>
 
-            <aside class="w-80 order-2">
-                <div class="sticky top-25 space-y-6">
+            <aside class="order-1 w-full lg:order-2 lg:w-80 lg:shrink-0">
+                <div class="lg:hidden">
+                    <div class="flex gap-2">
+                        <div class="relative flex-1">
+                            <input #mobileSearch [value]="searchQuery" (input)="onSearch(mobileSearch.value)" type="text"
+                                class="h-11 w-full rounded-lg border border-gray-200 bg-white pl-10 pr-4 text-sm outline-none transition-all focus:border-[#273F4B] focus:ring-2 focus:ring-[#273F4B]/20"
+                                placeholder="Buscar artigo...">
+                            <svg class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </div>
+
+                        <button type="button"
+                            (click)="toggleCategoryFilter()"
+                            [attr.aria-expanded]="isCategoryFilterOpen"
+                            class="inline-flex h-11 shrink-0 items-center gap-2 rounded-lg bg-[#273F4B] px-4 text-sm font-bold text-white transition-colors hover:bg-[#1a2b34]">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h18M6 12h12M10 20h4"/></svg>
+                            Filtrar
+                        </button>
+                    </div>
+
+                    @if (isCategoryFilterOpen) {
+                        <div class="fixed inset-0 z-[60] lg:hidden" role="dialog" aria-modal="true" aria-labelledby="mobile-category-filter-title">
+                            <button type="button" class="absolute inset-0 h-full w-full bg-black/40" aria-label="Fechar filtro" (click)="closeCategoryFilter()"></button>
+
+                            <div class="absolute inset-x-0 bottom-0 max-h-[80vh] overflow-y-auto rounded-t-2xl bg-white p-6 shadow-2xl">
+                                <div class="mb-4 flex items-center justify-between gap-4">
+                                    <div>
+                                        <h4 id="mobile-category-filter-title" class="text-sm font-bold uppercase tracking-wider text-gray-800">Areas de Interesse</h4>
+                                        <p class="mt-1 text-xs text-gray-500">Selecione uma categoria para filtrar.</p>
+                                    </div>
+
+                                    <button type="button" class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gray-100 text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-700" aria-label="Fechar filtro" (click)="closeCategoryFilter()">
+                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </button>
+                                </div>
+
+                                <div class="flex flex-col gap-1">
+                                    @for (cat of categories; track cat) {
+                                        <button type="button" (click)="selectCategory(cat)"
+                                            [class.bg-[#273F4B]/5]="selectedCategory === cat"
+                                            [class.text-[#273F4B]]="selectedCategory === cat"
+                                            [class.font-bold]="selectedCategory === cat"
+                                            class="flex items-center justify-between rounded-lg px-3 py-3 text-left text-sm text-gray-600 transition-all hover:bg-gray-50">
+                                            {{ cat }}
+                                            @if (selectedCategory === cat) {
+                                                <span class="h-1.5 w-1.5 rounded-full bg-[#273F4B]"></span>
+                                            }
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="hidden space-y-6 lg:sticky lg:top-25 lg:block">
                     
                     <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
                         <h4 class="text-sm font-bold text-gray-800 uppercase tracking-wider mb-4">Pesquisar</h4>
                         <div class="relative">
-                            <input #search (input)="onSearch(search.value)" type="text" 
+                            <input #desktopSearch [value]="searchQuery" (input)="onSearch(desktopSearch.value)" type="text"
                                 class="w-full pl-10 pr-4 h-11 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#273F4B]/20 focus:border-[#273F4B] outline-none transition-all"
-                                placeholder="Buscar conteúdo...">
+                                placeholder="Buscar artigo...">
                             <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                         </div>
                     </div>
@@ -127,7 +184,7 @@
                         <h4 class="text-sm font-bold text-gray-800 uppercase tracking-wider mb-4">Áreas de Interesse</h4>
                         <div class="flex flex-col gap-1">
                             @for (cat of categories; track cat) {
-                                <button (click)="selectedCategory = cat"
+                                <button type="button" (click)="selectCategory(cat)"
                                     [class.bg-[#273F4B]/5]="selectedCategory === cat"
                                     [class.text-[#273F4B]]="selectedCategory === cat"
                                     [class.font-bold]="selectedCategory === cat"
@@ -144,7 +201,7 @@
             </aside>
         </div>
     </div>
-    <section class="w-8/10 max-w-300 mx-auto py-30 text-center">
+    <section class="mx-auto w-full max-w-300 px-0 py-20 text-center md:py-30">
         <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
             Precisa de Consultoria Jurídica Especializada?
         </h2>

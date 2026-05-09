@@ -1,6 +1,6 @@
-import { Component, HostListener } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, HostListener, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-layout',
@@ -8,13 +8,34 @@ import { CommonModule } from '@angular/common';
   templateUrl: './layout.html',
   styleUrl: './layout.css',
 })
-export class Layout {
+export class Layout implements OnInit {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
+  private readonly whatsappBubbleStorageKey = 'kwadv.whatsappBubbleClosed';
+
   menuAberto = false;
   isScrolled = false;
+  showWhatsappBubble = false;
+
+  ngOnInit() {
+    if (!this.isBrowser) {
+      return;
+    }
+
+    this.showWhatsappBubble =
+      sessionStorage.getItem(this.whatsappBubbleStorageKey) !== 'true';
+  }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
     this.isScrolled = window.scrollY > 80; // Ponto de gatilho mais suave
+  }
+
+  @HostListener('window:resize', [])
+  onWindowResize() {
+    if (window.innerWidth >= 768 && this.menuAberto) {
+      this.fecharMenu();
+    }
   }
 
   toggleMenu() {
@@ -30,5 +51,13 @@ export class Layout {
   fecharMenu() {
     this.menuAberto = false;
     document.body.style.overflow = 'auto';
+  }
+
+  fecharWhatsappBubble() {
+    this.showWhatsappBubble = false;
+
+    if (this.isBrowser) {
+      sessionStorage.setItem(this.whatsappBubbleStorageKey, 'true');
+    }
   }
 }

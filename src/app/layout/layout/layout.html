@@ -1,6 +1,10 @@
 <header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-xl shadow-lg py-3">
-    <div class="md:w-8/10 md:max-w-[1200px] mx-auto px-6 md:px-0 flex items-center justify-between">
-        <a href="/#inicio" class="relative block h-12 w-12 md:h-[60px] md:w-[260px] overflow-hidden">
+    <div class="mx-auto flex w-full max-w-[1200px] items-center justify-between px-6 sm:px-8 xl:px-0">
+        <a
+            href="/#inicio"
+            class="relative block h-12 md:h-[60px] overflow-hidden transition-[width] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
+            [ngClass]="isScrolled ? 'w-12 md:w-[60px]' : 'w-12 md:w-[260px]'"
+        >
             <img
                 src="logos/logo-1.svg"
                 alt="Logo Kevin Willian Completa"
@@ -11,7 +15,7 @@
             <img
                 src="logos/logo-4.svg"
                 alt="Ícone Kevin Willian"
-                class="absolute left-0 inset-y-0 h-full w-12 md:w-[60px] object-contain transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                class="absolute inset-0 h-full w-full object-contain transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
                 [ngClass]="isScrolled ? 'opacity-100 translate-x-0' : 'opacity-100 translate-x-0 md:opacity-0 md:translate-x-6'"
             />
         </a>
@@ -35,15 +39,36 @@
         </button>
 
         <nav class="hidden md:flex items-center gap-8 text-[15px] font-medium">
-            <a href="/#inicio" class="text-(--color-4) hover:text-[#273F4B] transition-colors">Início</a>
-            <a href="/#sobre" class="text-(--color-4) hover:text-[#273F4B] transition-colors">Sobre</a>
-            <a href="/#servicos" class="text-(--color-4) hover:text-[#273F4B] transition-colors">Áreas</a>
-            <a href="/artigos" class="text-(--color-4) hover:text-[#273F4B] transition-colors">Artigos</a>
-            <a href="/#contato" class="text-(--color-4) hover:text-[#273F4B] transition-colors">Contato</a>
+            <a href="/#inicio" class="text-(--color-4) hover:text-[#273F4B] transition-colors">
+                Início
+            </a>
 
-            <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer"
-               class="ml-2 flex items-center gap-2 bg-[#273F4B] text-white rounded-md font-semibold hover:bg-[#3C5562] transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 px-5 py-2.5 text-sm">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M16.5562 12.9062L16.1007 13.359C16.1007 13.359 15.0181 14.4355 12.0631 11.4972C9.10812 8.55901 10.1907 7.48257 10.1907 7.48257L10.4775 7.19738C11.1841 6.49484 11.2507 5.36691 10.6342 4.54348L9.37326 2.85908C8.61028 1.83992 7.13596 1.70529 6.26145 2.57483L4.69185 4.13552C4.25823 4.56668 3.96765 5.12559 4.00289 5.74561C4.09304 7.33182 4.81071 10.7447 8.81536 14.7266C13.0621 18.9492 17.0468 19.117 18.6763 18.9651C19.1917 18.9171 19.6399 18.6546 20.0011 18.2954L21.4217 16.883C22.3806 15.9295 22.1102 14.2949 20.8833 13.628L18.9728 12.5894C18.1672 12.1515 17.1858 12.2801 16.5562 12.9062Z"/></svg>
+            <a href="/#sobre" class="text-(--color-4) hover:text-[#273F4B] transition-colors">
+                Sobre
+            </a>
+
+            <a href="/#servicos" class="text-(--color-4) hover:text-[#273F4B] transition-colors">
+                Áreas
+            </a>
+
+            <a href="/artigos" class="text-(--color-4) hover:text-[#273F4B] transition-colors">
+                Artigos
+            </a>
+
+            <a href="/#contato" class="text-(--color-4) hover:text-[#273F4B] transition-colors">
+                Contato
+            </a>
+
+            <a
+                href="https://wa.me/5511999999999"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ml-2 flex items-center gap-2 bg-[#273F4B] text-white rounded-md font-semibold hover:bg-[#3C5562] transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 px-5 py-2.5 text-sm"
+            >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M16.5562 12.9062L16.1007 13.359C16.1007 13.359 15.0181 14.4355 12.0631 11.4972C9.10812 8.55901 10.1907 7.48257 10.1907 7.48257L10.4775 7.19738C11.1841 6.49484 11.2507 5.36691 10.6342 4.54348L9.37326 2.85908C8.61028 1.83992 7.13596 1.70529 6.26145 2.57483L4.69185 4.13552C4.25823 4.56668 3.96765 5.12559 4.00289 5.74561C4.09304 7.33182 4.81071 10.7447 8.81536 14.7266C13.0621 18.9492 17.0468 19.117 18.6763 18.9651C19.1917 18.9171 19.6399 18.6546 20.0011 18.2954L21.4217 16.883C22.3806 15.9295 22.1102 14.2949 20.8833 13.628L18.9728 12.5894C18.1672 12.1515 17.1858 12.2801 16.5562 12.9062Z"/>
+                </svg>
+
                 Atendimento Online
             </a>
         </nav>
@@ -51,26 +76,71 @@
 </header>
 
 @if(menuAberto) {
-    <div class="fixed inset-x-0 top-[72px] bottom-0 z-40 bg-[#273F4B] text-white flex flex-col justify-center animate-fade-in md:hidden">
-        <div class="px-8 w-full max-w-sm mx-auto flex flex-col gap-8 text-center">
-            <nav class="flex flex-col gap-6 text-2xl font-light tracking-wide">
-                <a href="/#inicio" (click)="fecharMenu()" class="hover:text-(--color-2) transition-colors">Início</a>
-                <a href="/#sobre" (click)="fecharMenu()" class="hover:text-(--color-2) transition-colors">Sobre o Advogado</a>
-                <a href="/#servicos" (click)="fecharMenu()" class="hover:text-(--color-2) transition-colors">Áreas de Atuação</a>
-                <a href="/artigos" (click)="fecharMenu()" class="hover:text-(--color-2) transition-colors">Artigos</a>
-                <a href="/#contato" (click)="fecharMenu()" class="hover:text-(--color-2) transition-colors">Contato</a>
-            </nav>
-
-            <div class="w-12 h-[1px] bg-white/20 mx-auto my-4"></div>
-
-            <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer"
-               class="bg-white text-[#273F4B] px-8 py-4 rounded-md font-bold text-lg flex items-center justify-center gap-3 hover:bg-gray-100 transition-colors shadow-lg">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M16.5562 12.9062L16.1007 13.359C16.1007 13.359 15.0181 14.4355 12.0631 11.4972C9.10812 8.55901 10.1907 7.48257 10.1907 7.48257L10.4775 7.19738C11.1841 6.49484 11.2507 5.36691 10.6342 4.54348L9.37326 2.85908C8.61028 1.83992 7.13596 1.70529 6.26145 2.57483L4.69185 4.13552C4.25823 4.56668 3.96765 5.12559 4.00289 5.74561C4.09304 7.33182 4.81071 10.7447 8.81536 14.7266C13.0621 18.9492 17.0468 19.117 18.6763 18.9651C19.1917 18.9171 19.6399 18.6546 20.0011 18.2954L21.4217 16.883C22.3806 15.9295 22.1102 14.2949 20.8833 13.628L18.9728 12.5894C18.1672 12.1515 17.1858 12.2801 16.5562 12.9062Z"/></svg>
-                Falar com Advogado
-            </a>
+    <div class="fixed inset-0 z-[70] flex flex-col overflow-y-auto bg-[#273F4B] text-white animate-fade-in md:hidden">
+        <div class="mx-auto flex w-full max-w-[1200px] justify-end px-6 py-5 sm:px-8">
+            <button
+                class="grid h-11 w-11 place-items-center rounded-full border border-white/20 text-white transition-colors hover:bg-white/10"
+                type="button"
+                aria-label="Fechar menu"
+                (click)="fecharMenu()"
+            >
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
         </div>
 
-        <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-8 px-6 pb-8 text-center sm:px-8">
+            <a href="/#inicio" (click)="fecharMenu()" class="mx-auto block w-full max-w-[280px]">
+                <img src="logos/logo-2.svg" alt="Logo da Kevin Willian Advogado" class="h-auto w-full object-contain">
+            </a>
+
+            <nav class="flex flex-col divide-y divide-white/10 border-y border-white/10 text-left">
+                <a href="/#inicio" (click)="fecharMenu()" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
+                    Início
+                </a>
+
+                <a href="/#sobre" (click)="fecharMenu()" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
+                    Sobre o Advogado
+                </a>
+
+                <a href="/#servicos" (click)="fecharMenu()" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
+                    Áreas de Atuação
+                </a>
+
+                <a href="/artigos" (click)="fecharMenu()" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
+                    Artigos
+                </a>
+
+                <a href="/#contato" (click)="fecharMenu()" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
+                    Contato
+                </a>
+            </nav>
+
+            <a
+                href="https://wa.me/5511999999999"
+                target="_blank"
+                rel="noopener noreferrer"
+                (click)="fecharMenu()"
+                class="bg-white text-[#273F4B] px-8 py-4 rounded-md font-bold text-base flex items-center justify-center gap-3 hover:bg-gray-100 transition-colors shadow-lg"
+            >
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M16.5562 12.9062L16.1007 13.359C16.1007 13.359 15.0181 14.4355 12.0631 11.4972C9.10812 8.55901 10.1907 7.48257 10.1907 7.48257L10.4775 7.19738C11.1841 6.49484 11.2507 5.36691 10.6342 4.54348L9.37326 2.85908C8.61028 1.83992 7.13596 1.70529 6.26145 2.57483L4.69185 4.13552C4.25823 4.56668 3.96765 5.12559 4.00289 5.74561C4.09304 7.33182 4.81071 10.7447 8.81536 14.7266C13.0621 18.9492 17.0468 19.117 18.6763 18.9651C19.1917 18.9171 19.6399 18.6546 20.0011 18.2954L21.4217 16.883C22.3806 15.9295 22.1102 14.2949 20.8833 13.628L18.9728 12.5894C18.1672 12.1515 17.1858 12.2801 16.5562 12.9062Z"/>
+                </svg>
+
+                Falar com Advogado
+            </a>
+
+            <div class="grid grid-cols-2 gap-3 text-sm text-(--color-2)">
+                <a href="mailto:contato@kevinwillian.adv.br" (click)="fecharMenu()" class="rounded-md border border-white/15 px-4 py-3 transition-colors hover:bg-white/10">
+                    E-mail
+                </a>
+                <a href="/#contato" (click)="fecharMenu()" class="rounded-md border border-white/15 px-4 py-3 transition-colors hover:bg-white/10">
+                    Atendimento online
+                </a>
+            </div>
+        </div>
+
     </div>
 }
 
@@ -78,16 +148,30 @@
     <router-outlet></router-outlet>
 </main>
 
-<footer class="bg-(--color-1) text-white">
-    <div class="md:w-8/10 md:max-w-[1200px] mx-auto px-8 md:px-0 py-16 flex flex-col md:flex-row gap-12 md:gap-20">
-        <div class="flex-1 flex flex-col justify-center md:justify-start">
+<footer class="bg-[#203743] text-white">
+    <div class="mx-auto grid w-full max-w-[1200px] gap-10 px-6 py-16 sm:px-8 md:grid-cols-2 lg:grid-cols-[1.35fr_0.75fr_0.9fr_1fr] xl:px-0">
+        <div class="flex flex-col items-center text-center md:items-start md:text-left">
             <a href="/#inicio" class="flex flex-col w-full items-center md:items-start">
                 <img src="logos/logo-2.svg" alt="Logo da Kevin Willian Advogado" class="w-56 md:w-64 transition-transform hover:scale-105">
             </a>
+            <p class="mt-6 max-w-sm text-sm leading-relaxed text-(--color-2)">
+                Atendimento jurídico com foco em orientar, prevenir riscos e conduzir cada caso com clareza do primeiro contato ao encerramento.
+            </p>
+            <a
+                href="https://wa.me/5511999999999"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-6 inline-flex items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-bold text-[#273F4B] transition-colors hover:bg-gray-100"
+            >
+                <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M16.5562 12.9062L16.1007 13.359C16.1007 13.359 15.0181 14.4355 12.0631 11.4972C9.10812 8.55901 10.1907 7.48257 10.1907 7.48257L10.4775 7.19738C11.1841 6.49484 11.2507 5.36691 10.6342 4.54348L9.37326 2.85908C8.61028 1.83992 7.13596 1.70529 6.26145 2.57483L4.69185 4.13552C4.25823 4.56668 3.96765 5.12559 4.00289 5.74561C4.09304 7.33182 4.81071 10.7447 8.81536 14.7266C13.0621 18.9492 17.0468 19.117 18.6763 18.9651C19.1917 18.9171 19.6399 18.6546 20.0011 18.2954L21.4217 16.883C22.3806 15.9295 22.1102 14.2949 20.8833 13.628L18.9728 12.5894C18.1672 12.1515 17.1858 12.2801 16.5562 12.9062Z"/>
+                </svg>
+                Atendimento Online
+            </a>
         </div>
-        <div class="flex-1">
-            <h4 class="text-lg font-semibold mb-4">Links Rápidos</h4>
-            <nav class="space-y-2 text-sm">
+        <div>
+            <h4 class="mb-4 text-sm font-bold uppercase tracking-wider text-white">Links Rápidos</h4>
+            <nav class="space-y-3 text-sm">
                 <a href="/#inicio" class="block text-(--color-2) hover:text-(--color-5)">Início</a>
                 <a href="/#sobre" class="block text-(--color-2) hover:text-(--color-5)">Sobre o Advogado</a>
                 <a href="/#servicos" class="block text-(--color-2) hover:text-(--color-5)">Áreas de Atuação</a>
@@ -95,18 +179,27 @@
                 <a href="/#contato" class="block text-(--color-2) hover:text-(--color-5)">Contato</a>
             </nav>
         </div>
-        <div class="flex-1">
-            <h4 class="text-lg font-semibold mb-4">Contato</h4>
-            <div class="space-y-2 text-sm">
-                <div>
+        <div>
+            <h4 class="mb-4 text-sm font-bold uppercase tracking-wider text-white">Atendimento</h4>
+            <nav class="space-y-3 text-sm">
+                <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" class="block text-(--color-2) hover:text-(--color-5)">Agendar pelo WhatsApp</a>
+                <a href="/#contato" class="block text-(--color-2) hover:text-(--color-5)">Enviar mensagem</a>
+                <a href="/artigos" class="block text-(--color-2) hover:text-(--color-5)">Ler artigos jurídicos</a>
+                <a href="/#servicos" class="block text-(--color-2) hover:text-(--color-5)">Ver especialidades</a>
+            </nav>
+        </div>
+        <div>
+            <h4 class="mb-4 text-sm font-bold uppercase tracking-wider text-white">Contato</h4>
+            <div class="space-y-4 text-sm">
+                <div class="border-b border-white/10 pb-3">
                     <p class="text-(--color-5)">Telefone / WhatsApp</p>
                     <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" class="hover:text-(--color-5)">(11) 99999-9999</a>
                 </div>
-                <div>
+                <div class="border-b border-white/10 pb-3">
                     <p class="text-(--color-5)">E-mail</p>
                     <a href="mailto:contato@kevinwillian.adv.br" class="hover:text-(--color-5)">contato@kevinwillian.adv.br</a>
                 </div>
-                <div>
+                <div class="border-b border-white/10 pb-3">
                     <p class="text-(--color-5)">Instagram</p>
                     <a href="#" target="_blank" rel="noopener noreferrer" class="hover:text-(--color-5)">@kevinwillian.adv</a>
                 </div>
@@ -117,8 +210,8 @@
             </div>
         </div>
     </div>
-    <div class="border-t border-white/20 py-6">
-        <div class="w-8/10 max-w-[1200px] mx-auto text-center text-sm text-(--color-2) flex flex-col justify-between md:flex-row gap-3">
+    <div class="border-t border-white/10 py-6">
+        <div class="mx-auto flex w-full max-w-[1200px] flex-col justify-between gap-3 px-6 text-center text-xs text-(--color-2) sm:px-8 md:flex-row md:text-sm xl:px-0">
             <p>©2025 Kevin Willian Advogado. Todos os direitos reservados.</p>
             <p>
                 <span>Desenvolvido por </span>
@@ -127,3 +220,40 @@
         </div>
     </div>
 </footer>
+
+@if (showWhatsappBubble && !menuAberto) {
+    <div class="fixed bottom-4 right-4 z-40 w-[calc(100%-2rem)] max-w-sm sm:bottom-6 sm:right-6">
+        <div class="relative rounded-xl border border-gray-200 bg-white shadow-2xl transition-transform hover:-translate-y-0.5">
+            <button
+                type="button"
+                aria-label="Fechar atendimento pelo WhatsApp"
+                class="absolute right-3 top-3 z-10 grid h-8 w-8 place-items-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
+                (click)="$event.stopPropagation(); fecharWhatsappBubble()"
+            >
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+
+            <a
+                href="https://wa.me/5511999999999"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Iniciar conversa pelo WhatsApp"
+                class="flex gap-3 rounded-xl p-4 pr-12"
+            >
+                <div class="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-[#25D366] text-white shadow-md">
+                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/>
+                    </svg>
+                </div>
+
+                <div class="min-w-0 flex-1">
+                    <p class="text-sm font-bold text-gray-900">Precisa de ajuda?</p>
+                    <p class="mt-1 text-sm leading-snug text-gray-600">Atendimento 100% online pelo WhatsApp.</p>
+                    <p class="mt-2 text-xs font-semibold text-[#273F4B]">Clique para iniciar a conversa</p>
+                </div>
+            </a>
+        </div>
+    </div>
+}

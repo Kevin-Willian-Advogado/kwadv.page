@@ -18,9 +18,23 @@ export class Articles {
   searchQuery = '';
   selectedCategory = 'Todas';
   currentBannerIndex = 0;
+  isCategoryFilterOpen = false;
 
   onSearch(value: string): void {
     this.searchQuery = value.trim();
+  }
+
+  toggleCategoryFilter(): void {
+    this.isCategoryFilterOpen = !this.isCategoryFilterOpen;
+  }
+
+  closeCategoryFilter(): void {
+    this.isCategoryFilterOpen = false;
+  }
+
+  selectCategory(category: string): void {
+    this.selectedCategory = category;
+    this.isCategoryFilterOpen = false;
   }
 
   get allArticles(): ArticleData[] {
