@@ -107,7 +107,10 @@ jobs:
           import os
           import urllib.parse
 
-          params = {"id": f"eq.{os.environ['ARTICLE_ID']}"}
+          params = {
+              "id": f"eq.{os.environ['ARTICLE_ID']}",
+              "select": "id",
+          }
           updated_at = os.environ.get("ARTICLE_UPDATED_AT", "").strip()
           if updated_at:
               params["updated_at"] = f"eq.{updated_at}"
