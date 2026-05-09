@@ -60,6 +60,30 @@ jobs:
       - name: Build static site
         run: npm run build
 
+      - name: Validate requested article route
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.article_id != '' && inputs.article_slug != '' }}
+        env:
+          ARTICLE_SLUG: ${{ inputs.article_slug }}
+          PUBLICATION_ACTION: ${{ inputs.publication_action }}
+        run: |
+          set -euo pipefail
+
+          article_path="dist/kwadv.page/browser/artigo/${ARTICLE_SLUG}/index.html"
+
+          if [ "${PUBLICATION_ACTION}" = "unpublish" ]; then
+            if [ -f "${article_path}" ]; then
+              echo "Article route still exists after unpublish build: ${article_path}"
+              exit 1
+            fi
+
+            exit 0
+          fi
+
+          if [ ! -f "${article_path}" ]; then
+            echo "Article route was not generated: ${article_path}"
+            exit 1
+          fi
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
