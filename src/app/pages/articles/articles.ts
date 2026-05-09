@@ -9,7 +9,6 @@ import { ArticleCategory, ArticleData } from '@core/articles/articles.service';
   selector: 'app-articles',
   imports: [DatePipe],
   templateUrl: './articles.html',
-  styleUrl: './articles.css',
 })
 export class Articles {
   private readonly route = inject(ActivatedRoute);

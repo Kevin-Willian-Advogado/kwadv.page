@@ -6,7 +6,6 @@ import { Router, RouterOutlet } from '@angular/router';
   selector: 'app-layout',
   imports: [RouterOutlet, CommonModule],
   templateUrl: './layout.html',
-  styleUrl: './layout.css',
 })
 export class Layout implements OnInit {
   private readonly platformId = inject(PLATFORM_ID);
@@ -30,7 +29,7 @@ export class Layout implements OnInit {
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    this.isScrolled = window.scrollY > 80; // Ponto de gatilho mais suave
+    this.isScrolled = window.scrollY > 80;
   }
 
   @HostListener('window:resize', [])
@@ -42,7 +41,7 @@ export class Layout implements OnInit {
 
   toggleMenu() {
     this.menuAberto = !this.menuAberto;
-    // Trava o scroll do body quando o menu abre
+
     if (this.menuAberto) {
       document.body.style.overflow = 'hidden';
     } else {

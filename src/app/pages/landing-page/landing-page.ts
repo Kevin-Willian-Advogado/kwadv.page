@@ -10,7 +10,6 @@ import { ArticleData } from '@core/articles/articles.service';
   selector: 'app-landing-page',
   imports: [Contacts, DatePipe],
   templateUrl: './landing-page.html',
-  styleUrl: './landing-page.css',
 })
 export class LandingPage {
   private readonly route = inject(ActivatedRoute);

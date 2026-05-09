@@ -10,6 +10,8 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { ARTICLES_DATA_SOURCE } from '@core/articles/articles.data-source';
+import { TransferStateArticlesDataSource } from '@core/articles/articles.transfer-state.data-source';
 
 registerLocaleData(localePtBr, 'pt-BR');
 
@@ -19,6 +21,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
+    { provide: ARTICLES_DATA_SOURCE, useClass: TransferStateArticlesDataSource },
     { provide: LOCALE_ID, useValue: 'pt-BR' },
   ]
 };

@@ -9,7 +9,6 @@ import { ArticleData } from '@core/articles/articles.service';
   selector: 'app-article',
   imports: [DatePipe],
   templateUrl: './article.html',
-  styleUrl: './article.css',
   encapsulation: ViewEncapsulation.None,
 })
 export class Article {

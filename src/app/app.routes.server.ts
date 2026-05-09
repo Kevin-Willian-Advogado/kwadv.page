@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { RenderMode, ServerRoute } from '@angular/ssr';
+import { PrerenderFallback, RenderMode, ServerRoute } from '@angular/ssr';
 
 import { ArticlesService } from '@core/articles/articles.service';
 
@@ -15,6 +15,7 @@ export const serverRoutes: ServerRoute[] = [
   {
     path: 'artigo/:slug',
     renderMode: RenderMode.Prerender,
+    fallback: PrerenderFallback.None,
     async getPrerenderParams() {
       const articles = await inject(ArticlesService).getAllArticles();
       return articles.map((article) => ({ slug: article.slug }));
@@ -22,6 +23,6 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: '**',
-    renderMode: RenderMode.Server,
+    renderMode: RenderMode.Client,
   },
 ];
