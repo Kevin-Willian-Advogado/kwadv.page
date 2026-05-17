@@ -59,28 +59,57 @@
         </div>
         <div class="md:border-2 border-[#E6E8E9] rounded-2xl p-0 md:p-8">
             <h3 class="text-2xl font-bold text-gray-900 mb-4">Envie uma Mensagem</h3>
-            <form class="space-y-4">
+            <form [formGroup]="contactForm" (ngSubmit)="submitContact()" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Nome Completo</label>
-                    <input type="text" required placeholder="Seu nome" class="w-full border border-gray-300 rounded-lg h-12 px-4 focus:ring-2 focus:ring-[#273F4B] outline-none" />
+                    <input type="text" formControlName="name" required placeholder="Seu nome" class="w-full border border-gray-300 rounded-lg h-12 px-4 focus:ring-2 focus:ring-[#273F4B] outline-none" />
+                    @if (contactForm.controls.name.touched && contactForm.controls.name.invalid) {
+                        <p class="mt-1 text-xs text-red-600">Informe seu nome.</p>
+                    }
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">E-mail</label>
-                    <input type="email" required placeholder="seu@email.com" class="w-full border border-gray-300 rounded-lg h-12 px-4 focus:ring-2 focus:ring-[#273F4B] outline-none" />
+                    <input type="email" formControlName="email" required placeholder="seu@email.com" class="w-full border border-gray-300 rounded-lg h-12 px-4 focus:ring-2 focus:ring-[#273F4B] outline-none" />
+                    @if (contactForm.controls.email.touched && contactForm.controls.email.invalid) {
+                        <p class="mt-1 text-xs text-red-600">Informe um e-mail valido.</p>
+                    }
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Telefone</label>
-                    <input type="text" required placeholder="(11) 99999-9999" class="w-full border border-gray-300 rounded-lg h-12 px-4 focus:ring-2 focus:ring-[#273F4B] outline-none" />
+                    <input type="text" formControlName="phone" required placeholder="(11) 99999-9999" class="w-full border border-gray-300 rounded-lg h-12 px-4 focus:ring-2 focus:ring-[#273F4B] outline-none" />
+                    @if (contactForm.controls.phone.touched && contactForm.controls.phone.hasError('required')) {
+                        <p class="mt-1 text-xs text-red-600">Informe seu telefone.</p>
+                    }
+                    @if (contactForm.controls.phone.touched && contactForm.controls.phone.hasError('phone')) {
+                        <p class="mt-1 text-xs text-red-600">Use apenas numeros, espacos, parenteses, hifen e sinal de +.</p>
+                    }
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Mensagem</label>
-                    <textarea required placeholder="Descreva brevemente seu caso..." class="w-full border border-gray-300 rounded-lg min-h-30 p-4 focus:ring-2 focus:ring-[#273F4B] outline-none"></textarea>
+                    <textarea formControlName="message" required placeholder="Descreva brevemente seu caso..." class="w-full border border-gray-300 rounded-lg min-h-30 p-4 focus:ring-2 focus:ring-[#273F4B] outline-none"></textarea>
+                    @if (contactForm.controls.message.touched && contactForm.controls.message.invalid) {
+                        <p class="mt-1 text-xs text-red-600">Informe a mensagem.</p>
+                    }
                 </div>
                 <label for="lgpd" class="flex items-center text-gray-700 cursor-pointer font-light text-xs md:text-xm">
-                    <input type="checkbox" id="lgpd" name="concordo_lgpd" required class="h-5 w-5 border-gray-300 rounded text-[#273F4B] focus:ring-2 focus:ring-offset-2 focus:ring-[#273F4B] mt-0.5 mr-2">
+                    <input type="checkbox" id="lgpd" formControlName="lgpdAccepted" required class="h-5 w-5 border-gray-300 rounded text-[#273F4B] focus:ring-2 focus:ring-offset-2 focus:ring-[#273F4B] mt-0.5 mr-2">
                     <span>Li e concordo com a <a href="/politica-privacidade" class="text-[#273F4B] underline hover:text-[#3C5562] font-medium" target="_blank" rel="noopener noreferrer">política de privacidade</a>.</span>
                 </label>
-                <button type="submit" class="w-full bg-[#273F4B] hover:bg-[#273F4B] text-white font-semibold py-6 rounded-lg transition-all duration-300">Enviar Mensagem →</button>
+                @if (contactForm.controls.lgpdAccepted.touched && contactForm.controls.lgpdAccepted.invalid) {
+                    <p class="-mt-2 text-xs text-red-600">Confirme a politica de privacidade.</p>
+                }
+
+                @if (errorMessage) {
+                    <p class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{{ errorMessage }}</p>
+                }
+
+                @if (feedbackMessage) {
+                    <p class="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">{{ feedbackMessage }}</p>
+                }
+
+                <button type="submit" [disabled]="isSubmitting" class="w-full bg-[#273F4B] hover:bg-[#273F4B] text-white font-semibold py-6 rounded-lg transition-all duration-300 disabled:opacity-60">
+                    {{ isSubmitting ? 'Enviando...' : 'Enviar Mensagem ->' }}
+                </button>
             </form>
         </div>
     </div>
