@@ -62,9 +62,9 @@
             </a>
 
             <a
-                [href]="primaryContactUrl"
-                [attr.target]="primaryContactTarget"
-                [attr.rel]="primaryContactRel"
+                [href]="headerContactUrl"
+                [attr.target]="whatsappTarget"
+                [attr.rel]="whatsappRel"
                 class="ml-2 flex items-center gap-2 bg-[#273F4B] text-white rounded-md font-semibold hover:bg-[#3C5562] transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 px-5 py-2.5 text-sm"
             >
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -122,9 +122,9 @@
             </nav>
 
             <a
-                [href]="primaryContactUrl"
-                [attr.target]="primaryContactTarget"
-                [attr.rel]="primaryContactRel"
+                [href]="mobileContactUrl"
+                [attr.target]="whatsappTarget"
+                [attr.rel]="whatsappRel"
                 (click)="fecharMenu()"
                 class="bg-white text-[#273F4B] px-8 py-4 rounded-md font-bold text-base flex items-center justify-center gap-3 hover:bg-gray-100 transition-colors shadow-lg"
             >
@@ -162,9 +162,9 @@
                 Atendimento jurídico com foco em orientar, prevenir riscos e conduzir cada caso com clareza do primeiro contato ao encerramento.
             </p>
             <a
-                [href]="primaryContactUrl"
-                [attr.target]="primaryContactTarget"
-                [attr.rel]="primaryContactRel"
+                [href]="footerContactUrl"
+                [attr.target]="whatsappTarget"
+                [attr.rel]="whatsappRel"
                 class="mt-6 inline-flex items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-bold text-[#273F4B] transition-colors hover:bg-gray-100"
             >
                 <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -188,7 +188,7 @@
         <div>
             <h4 class="mb-4 text-sm font-bold uppercase tracking-wider text-white">Atendimento</h4>
             <nav class="space-y-3 text-sm">
-                <a [href]="primaryContactUrl" [attr.target]="primaryContactTarget" [attr.rel]="primaryContactRel" class="block text-(--color-2) hover:text-(--color-5)">Agendar pelo WhatsApp</a>
+                <a [href]="footerScheduleUrl" [attr.target]="whatsappTarget" [attr.rel]="whatsappRel" class="block text-(--color-2) hover:text-(--color-5)">Agendar pelo WhatsApp</a>
                 <a href="/#contato" class="block text-(--color-2) hover:text-(--color-5)">Enviar mensagem</a>
                 @if (articlesEnabled) {
                     <a href="/artigos" class="block text-(--color-2) hover:text-(--color-5)">Ler artigos jurídicos</a>
@@ -202,7 +202,7 @@
                 @if (contact.phoneDisplay) {
                     <div class="border-b border-white/10 pb-3">
                         <p class="text-(--color-5)">Telefone / WhatsApp</p>
-                        <a [href]="contact.whatsappUrl || '/#contato'" target="_blank" rel="noopener noreferrer" class="hover:text-(--color-5)">{{ contact.phoneDisplay }}</a>
+                        <a [href]="footerPhoneUrl" [attr.target]="whatsappTarget" [attr.rel]="whatsappRel" class="hover:text-(--color-5)">{{ contact.phoneDisplay }}</a>
                     </div>
                 }
                 @if (contact.email) {
@@ -252,9 +252,9 @@
             </button>
 
             <a
-                [href]="primaryContactUrl"
-                [attr.target]="primaryContactTarget"
-                [attr.rel]="primaryContactRel"
+                [href]="bubbleContactUrl"
+                [attr.target]="whatsappTarget"
+                [attr.rel]="whatsappRel"
                 aria-label="Iniciar conversa pelo WhatsApp"
                 class="flex gap-3 rounded-xl p-4 pr-12"
             >

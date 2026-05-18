@@ -8,6 +8,7 @@ import { ArticleData } from '@core/articles/articles.service';
 import {
   DEFAULT_SITE_SETTINGS,
   SiteSettings,
+  buildWhatsappUrl,
   buildSiteContactViewModel,
 } from '@core/site-settings/site-settings.models';
 
@@ -37,7 +38,10 @@ export class LandingPage {
   }
 
   get primaryContactUrl(): string {
-    return this.contact.whatsappUrl || '#contato';
+    return buildWhatsappUrl(
+      this.siteSettings,
+      'Ola, vim pela pagina inicial e gostaria de agendar uma consulta online.',
+    ) || '#contato';
   }
 
   get primaryContactTarget(): string | null {

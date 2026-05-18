@@ -33,7 +33,9 @@ export function buildSiteContactViewModel(settings: SiteSettings): SiteContactVi
 
   return {
     phoneDisplay: settings.contactPhoneWhatsapp.trim(),
-    whatsappUrl: whatsappDigits ? `https://wa.me/${whatsappDigits}` : '',
+    whatsappUrl: whatsappDigits
+      ? buildWhatsappUrl(settings, 'Ola, vim pelo site e gostaria de atendimento juridico.')
+      : '',
     email,
     emailUrl: email ? `mailto:${email}` : '',
     instagramLabel: toSocialLabel(instagramUrl, 'instagram.com'),
@@ -41,6 +43,22 @@ export function buildSiteContactViewModel(settings: SiteSettings): SiteContactVi
     linkedinLabel: toSocialLabel(linkedinUrl, 'linkedin.com'),
     linkedinUrl,
   };
+}
+
+export function buildWhatsappUrl(settings: SiteSettings, message: string): string {
+  const whatsappDigits = settings.contactPhoneWhatsapp.replace(/\D/g, '');
+
+  if (!whatsappDigits) {
+    return '';
+  }
+
+  const normalizedMessage = message.trim();
+
+  if (!normalizedMessage) {
+    return `https://wa.me/${whatsappDigits}`;
+  }
+
+  return `https://wa.me/${whatsappDigits}?text=${encodeURIComponent(normalizedMessage)}`;
 }
 
 function toSocialLabel(value: string, marker: string): string {

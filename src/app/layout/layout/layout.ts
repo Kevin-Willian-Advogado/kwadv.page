@@ -6,6 +6,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import {
   DEFAULT_SITE_SETTINGS,
   SiteSettings,
+  buildWhatsappUrl,
   buildSiteContactViewModel,
 } from '@core/site-settings/site-settings.models';
 
@@ -39,15 +40,35 @@ export class Layout implements OnInit {
     return this.siteSettings.articlesEnabled;
   }
 
-  get primaryContactUrl(): string {
-    return this.contact.whatsappUrl || '/#contato';
+  get headerContactUrl(): string {
+    return this.whatsappUrl('Ola, vi o site e quero iniciar um atendimento online.');
   }
 
-  get primaryContactTarget(): string | null {
+  get mobileContactUrl(): string {
+    return this.whatsappUrl('Ola, estou acessando pelo celular e gostaria de falar com um advogado.');
+  }
+
+  get footerContactUrl(): string {
+    return this.whatsappUrl('Ola, encontrei o contato no rodape do site e gostaria de atendimento online.');
+  }
+
+  get footerScheduleUrl(): string {
+    return this.whatsappUrl('Ola, gostaria de agendar uma consulta pelo WhatsApp.');
+  }
+
+  get footerPhoneUrl(): string {
+    return this.whatsappUrl('Ola, vi o telefone no site e gostaria de tirar uma duvida juridica.');
+  }
+
+  get bubbleContactUrl(): string {
+    return this.whatsappUrl('Ola, preciso de ajuda e quero iniciar uma conversa pelo WhatsApp.');
+  }
+
+  get whatsappTarget(): string | null {
     return this.contact.whatsappUrl ? '_blank' : null;
   }
 
-  get primaryContactRel(): string | null {
+  get whatsappRel(): string | null {
     return this.contact.whatsappUrl ? 'noopener noreferrer' : null;
   }
 
@@ -113,5 +134,9 @@ export class Layout implements OnInit {
     if (this.isBrowser) {
       sessionStorage.setItem(this.whatsappBubbleStorageKey, 'true');
     }
+  }
+
+  private whatsappUrl(message: string): string {
+    return buildWhatsappUrl(this.siteSettings, message) || '/#contato';
   }
 }

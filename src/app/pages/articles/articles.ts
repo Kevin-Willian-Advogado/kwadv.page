@@ -7,6 +7,7 @@ import { ArticleCategory, ArticleData } from '@core/articles/articles.service';
 import {
   DEFAULT_SITE_SETTINGS,
   SiteSettings,
+  buildWhatsappUrl,
   buildSiteContactViewModel,
 } from '@core/site-settings/site-settings.models';
 
@@ -58,7 +59,10 @@ export class Articles {
   }
 
   get primaryContactUrl(): string {
-    return this.contact.whatsappUrl || '/#contato';
+    return buildWhatsappUrl(
+      this.siteSettings,
+      'Ola, vi os conteudos do site e gostaria de conversar sobre meu caso.',
+    ) || '/#contato';
   }
 
   get primaryContactTarget(): string | null {

@@ -6,6 +6,7 @@ import { finalize } from 'rxjs';
 import {
   DEFAULT_SITE_SETTINGS,
   SiteSettings,
+  buildWhatsappUrl,
   buildSiteContactViewModel,
 } from '@core/site-settings/site-settings.models';
 
@@ -61,6 +62,28 @@ export class Contacts {
 
   get contact() {
     return buildSiteContactViewModel(this.siteSettings);
+  }
+
+  get phoneWhatsappUrl(): string {
+    return buildWhatsappUrl(
+      this.siteSettings,
+      'Ola, vi os dados de contato no site e gostaria de atendimento juridico.',
+    ) || '#contato';
+  }
+
+  get buttonWhatsappUrl(): string {
+    return buildWhatsappUrl(
+      this.siteSettings,
+      'Ola, quero falar agora pelo WhatsApp sobre meu caso.',
+    ) || '#contato';
+  }
+
+  get whatsappTarget(): string | null {
+    return this.contact.whatsappUrl ? '_blank' : null;
+  }
+
+  get whatsappRel(): string | null {
+    return this.contact.whatsappUrl ? 'noopener noreferrer' : null;
   }
 
   formatPhoneInput(): void {
