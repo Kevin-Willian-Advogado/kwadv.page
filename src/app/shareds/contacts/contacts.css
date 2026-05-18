@@ -1,0 +1,25 @@
+.contact-card-panel {
+  animation: contact-card-enter 260ms ease-out both;
+}
+
+textarea {
+  scrollbar-gutter: stable;
+}
+
+@keyframes contact-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-card-panel {
+    animation: none;
+  }
+}

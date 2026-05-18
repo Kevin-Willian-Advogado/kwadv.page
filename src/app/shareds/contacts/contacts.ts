@@ -26,25 +26,52 @@ const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_EREcwSKRXkRIRknqHOMh0g_FyIU7He0
   selector: 'app-contacts',
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './contacts.html',
+  styleUrl: './contacts.css',
 })
 export class Contacts {
   private readonly formBuilder = inject(FormBuilder);
   private readonly http = inject(HttpClient);
 
+  readonly messageMaxLength = 1000;
+
   readonly contactForm = this.formBuilder.nonNullable.group({
-    name: ['', [Validators.required, Validators.maxLength(160)]],
+    name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(120), nameValidator]],
     email: ['', [Validators.required, Validators.email, Validators.maxLength(180)]],
-    phone: ['', [Validators.required, Validators.maxLength(60), phoneValidator]],
-    message: ['', [Validators.required, Validators.maxLength(4000)]],
+    phone: ['', [Validators.required, Validators.maxLength(15), phoneValidator]],
+    message: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(this.messageMaxLength)]],
     lgpdAccepted: [false, [Validators.requiredTrue]],
   });
 
   isSubmitting = false;
+  isSubmitted = false;
   feedbackMessage = '';
+  submittedMessage = '';
   errorMessage = '';
+
+  get messageLength(): number {
+    return this.contactForm.controls.message.value.length;
+  }
+
+  formatPhoneInput(): void {
+    const control = this.contactForm.controls.phone;
+    const formatted = formatBrazilianPhone(control.value.replace(/\D/g, '').slice(0, 11));
+
+    if (control.value !== formatted) {
+      control.setValue(formatted, { emitEvent: false });
+    }
+  }
+
+  sendAnotherMessage(): void {
+    this.isSubmitted = false;
+    this.feedbackMessage = '';
+    this.submittedMessage = '';
+    this.errorMessage = '';
+    this.resetContactForm();
+  }
 
   submitContact(): void {
     this.feedbackMessage = '';
+    this.submittedMessage = '';
     this.errorMessage = '';
     this.contactForm.markAllAsTouched();
 
@@ -66,14 +93,10 @@ export class Contacts {
       }))
       .subscribe({
         next: (response) => {
-          this.feedbackMessage = response.mensagem ?? 'Mensagem enviada com sucesso.';
-          this.contactForm.reset({
-            name: '',
-            email: '',
-            phone: '',
-            message: '',
-            lgpdAccepted: false,
-          });
+          this.submittedMessage = response.mensagem ?? 'Mensagem enviada com sucesso.';
+          this.feedbackMessage = this.submittedMessage;
+          this.isSubmitted = true;
+          this.resetContactForm();
         },
         error: (error: unknown) => {
           this.errorMessage = this.extractErrorMessage(error) || 'Nao foi possivel enviar sua mensagem.';
@@ -100,6 +123,16 @@ export class Contacts {
       message: rawValue.message.trim(),
       lgpdAccepted: rawValue.lgpdAccepted,
     };
+  }
+
+  private resetContactForm(): void {
+    this.contactForm.reset({
+      name: '',
+      email: '',
+      phone: '',
+      message: '',
+      lgpdAccepted: false,
+    });
   }
 
   private extractErrorMessage(error: unknown): string {
@@ -139,11 +172,42 @@ export class Contacts {
   }
 }
 
+function nameValidator(control: AbstractControl<string>): ValidationErrors | null {
+  const value = control.value?.trim();
+  if (!value) {
+    return null;
+  }
+
+  const lettersOnly = value.replace(/[^\p{L}]/gu, '');
+
+  return lettersOnly.length >= 3 && /^[\p{L}\p{M}' .-]+$/u.test(value) ? null : { name: true };
+}
+
 function phoneValidator(control: AbstractControl<string>): ValidationErrors | null {
   const value = control.value?.trim();
   if (!value) {
     return null;
   }
 
-  return /^[+()\d\s-]{8,60}$/.test(value) ? null : { phone: true };
+  const digits = value.replace(/\D/g, '');
+
+  return digits.length === 10 || digits.length === 11 ? null : { phone: true };
+}
+
+function formatBrazilianPhone(digits: string): string {
+  if (digits.length <= 2) {
+    return digits;
+  }
+
+  const areaCode = digits.slice(0, 2);
+
+  if (digits.length <= 6) {
+    return `(${areaCode}) ${digits.slice(2)}`;
+  }
+
+  if (digits.length <= 10) {
+    return `(${areaCode}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+  }
+
+  return `(${areaCode}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
 }
