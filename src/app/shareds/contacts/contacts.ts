@@ -1,8 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
+import {
+  DEFAULT_SITE_SETTINGS,
+  SiteSettings,
+  buildSiteContactViewModel,
+} from '@core/site-settings/site-settings.models';
 
 interface ContactSubmitResponse {
   mensagem?: string;
@@ -32,6 +37,8 @@ export class Contacts {
   private readonly formBuilder = inject(FormBuilder);
   private readonly http = inject(HttpClient);
 
+  @Input() siteSettings: SiteSettings = DEFAULT_SITE_SETTINGS;
+
   readonly messageMaxLength = 1000;
 
   readonly contactForm = this.formBuilder.nonNullable.group({
@@ -50,6 +57,10 @@ export class Contacts {
 
   get messageLength(): number {
     return this.contactForm.controls.message.value.length;
+  }
+
+  get contact() {
+    return buildSiteContactViewModel(this.siteSettings);
   }
 
   formatPhoneInput(): void {

@@ -13,6 +13,8 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { ARTICLES_DATA_SOURCE } from '@core/articles/articles.data-source';
 import { TransferStateArticlesDataSource } from '@core/articles/articles.transfer-state.data-source';
+import { SITE_SETTINGS_DATA_SOURCE } from '@core/site-settings/site-settings.data-source';
+import { TransferStateSiteSettingsDataSource } from '@core/site-settings/site-settings.transfer-state.data-source';
 
 registerLocaleData(localePtBr, 'pt-BR');
 
@@ -24,6 +26,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideClientHydration(withEventReplay()),
     { provide: ARTICLES_DATA_SOURCE, useClass: TransferStateArticlesDataSource },
+    { provide: SITE_SETTINGS_DATA_SOURCE, useClass: TransferStateSiteSettingsDataSource },
     { provide: LOCALE_ID, useValue: 'pt-BR' },
   ]
 };

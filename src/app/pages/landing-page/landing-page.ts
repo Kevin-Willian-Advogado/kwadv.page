@@ -5,6 +5,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 import { Contacts } from '@shareds/component/contacts/contacts';
 import { ArticleData } from '@core/articles/articles.service';
+import {
+  DEFAULT_SITE_SETTINGS,
+  SiteSettings,
+  buildSiteContactViewModel,
+} from '@core/site-settings/site-settings.models';
 
 @Component({
   selector: 'app-landing-page',
@@ -19,8 +24,33 @@ export class LandingPage {
     return (this.routeData()['articles'] as ArticleData[] | undefined) ?? [];
   }
 
+  get siteSettings(): SiteSettings {
+    return (this.routeData()['siteSettings'] as SiteSettings | null | undefined) ?? DEFAULT_SITE_SETTINGS;
+  }
+
+  get contact() {
+    return buildSiteContactViewModel(this.siteSettings);
+  }
+
+  get articlesEnabled(): boolean {
+    return this.siteSettings.articlesEnabled;
+  }
+
+  get primaryContactUrl(): string {
+    return this.contact.whatsappUrl || '#contato';
+  }
+
+  get primaryContactTarget(): string | null {
+    return this.contact.whatsappUrl ? '_blank' : null;
+  }
+
+  get primaryContactRel(): string | null {
+    return this.contact.whatsappUrl ? 'noopener noreferrer' : null;
+  }
+
   get featuredArticles(): ArticleData[] {
-    return this.allArticles.filter((article) => article.highlights).slice(0, 3);
+    const highlightedArticles = this.allArticles.filter((article) => article.highlights).slice(0, 3);
+    return highlightedArticles.length >= 3 ? highlightedArticles : this.allArticles.slice(0, 3);
   }
 
   hideBrokenImage(event: Event): void {

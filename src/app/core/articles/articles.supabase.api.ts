@@ -4,7 +4,6 @@ const SUPABASE_BASE_URL = 'https://wwwntzwmvjvivputmlqg.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_EREcwSKRXkRIRknqHOMh0g_FyIU7He0';
 const SUPABASE_SERVICE_ROLE_KEY = process.env['SUPABASE_SERVICE_ROLE_KEY']?.trim() ?? '';
 const REQUESTED_PUBLICATION_ARTICLE_ID = parsePositiveInteger(process.env['PUBLICATION_ARTICLE_ID']);
-const PUBLISHED_ARTICLE_STATUS = 'eq.1';
 const PUBLICATION_ELIGIBLE_ARTICLE_STATUS = '(status.eq.1,status.eq.0)';
 const ARTICLES_SELECT =
   '*,authors(*),article_related!fk_article_related_links_articles_article_id(articles!fk_article_related_links_articles_related_articles_id(*))';
@@ -49,16 +48,16 @@ export interface SupabaseCategoryRow {
 })
 export class ArticlesSupabaseApi {
   async getArticles(): Promise<SupabaseArticleRow[]> {
-    const publishedArticles = await this.request<SupabaseArticleRow[]>('/rest/v1/articles', {
+    const publicationEligibleArticles = await this.request<SupabaseArticleRow[]>('/rest/v1/articles', {
       select: ARTICLES_SELECT,
-      status: PUBLISHED_ARTICLE_STATUS,
+      or: PUBLICATION_ELIGIBLE_ARTICLE_STATUS,
       published_at: 'not.is.null',
       order: 'published_at.desc',
     });
 
     const requestedPublicationArticles = await this.getRequestedPublicationArticles();
 
-    return this.mergeArticlesById(publishedArticles, requestedPublicationArticles);
+    return this.mergeArticlesById(publicationEligibleArticles, requestedPublicationArticles);
   }
 
   getCategories(): Promise<SupabaseCategoryRow[]> {

@@ -4,6 +4,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 
 import { ArticleCategory, ArticleData } from '@core/articles/articles.service';
+import {
+  DEFAULT_SITE_SETTINGS,
+  SiteSettings,
+  buildSiteContactViewModel,
+} from '@core/site-settings/site-settings.models';
 
 @Component({
   selector: 'app-articles',
@@ -38,6 +43,30 @@ export class Articles {
 
   get allArticles(): ArticleData[] {
     return (this.routeData()['articles'] as ArticleData[] | undefined) ?? [];
+  }
+
+  get siteSettings(): SiteSettings {
+    return (this.routeData()['siteSettings'] as SiteSettings | null | undefined) ?? DEFAULT_SITE_SETTINGS;
+  }
+
+  get contact() {
+    return buildSiteContactViewModel(this.siteSettings);
+  }
+
+  get articlesEnabled(): boolean {
+    return this.siteSettings.articlesEnabled;
+  }
+
+  get primaryContactUrl(): string {
+    return this.contact.whatsappUrl || '/#contato';
+  }
+
+  get primaryContactTarget(): string | null {
+    return this.contact.whatsappUrl ? '_blank' : null;
+  }
+
+  get primaryContactRel(): string | null {
+    return this.contact.whatsappUrl ? 'noopener noreferrer' : null;
   }
 
   get featuredArticles(): ArticleData[] {

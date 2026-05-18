@@ -1,3 +1,4 @@
+@if (articlesEnabled) {
 <main class="min-h-screen bg-gray-50/50 px-6 py-8 pt-25 font-sans sm:px-8">
     <div class="mx-auto max-w-300">
         
@@ -208,9 +209,10 @@
         <p class="text-gray-700 mb-6">
             Entre em contato conosco e descubra como podemos ajudar no seu caso.
         </p>
-        <a href="https://wa.me/5511999999999" target="_blank"
+        <a [href]="primaryContactUrl" [attr.target]="primaryContactTarget" [attr.rel]="primaryContactRel"
         class="inline-block bg-(--color-1) text-white px-8 py-3 rounded-md font-semibold shadow-md">
             Fale Conosco
         </a>
     </section>
 </main>
+}

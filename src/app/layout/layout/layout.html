@@ -51,18 +51,20 @@
                 Áreas
             </a>
 
-            <a href="/artigos" class="text-(--color-4) hover:text-[#273F4B] transition-colors">
-                Artigos
-            </a>
+            @if (articlesEnabled) {
+                <a href="/artigos" class="text-(--color-4) hover:text-[#273F4B] transition-colors">
+                    Artigos
+                </a>
+            }
 
             <a href="/#contato" class="text-(--color-4) hover:text-[#273F4B] transition-colors">
                 Contato
             </a>
 
             <a
-                href="https://wa.me/5511999999999"
-                target="_blank"
-                rel="noopener noreferrer"
+                [href]="primaryContactUrl"
+                [attr.target]="primaryContactTarget"
+                [attr.rel]="primaryContactRel"
                 class="ml-2 flex items-center gap-2 bg-[#273F4B] text-white rounded-md font-semibold hover:bg-[#3C5562] transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 px-5 py-2.5 text-sm"
             >
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -108,9 +110,11 @@
                     Áreas de Atuação
                 </a>
 
-                <a href="/artigos" (click)="navegarParaArtigos($event)" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
-                    Artigos
-                </a>
+                @if (articlesEnabled) {
+                    <a href="/artigos" (click)="navegarParaArtigos($event)" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
+                        Artigos
+                    </a>
+                }
 
                 <a href="/#contato" (click)="navegarParaSecao($event, 'contato')" class="flex items-center justify-between py-4 text-xl font-semibold tracking-wide hover:text-(--color-2) transition-colors">
                     Contato
@@ -118,9 +122,9 @@
             </nav>
 
             <a
-                href="https://wa.me/5511999999999"
-                target="_blank"
-                rel="noopener noreferrer"
+                [href]="primaryContactUrl"
+                [attr.target]="primaryContactTarget"
+                [attr.rel]="primaryContactRel"
                 (click)="fecharMenu()"
                 class="bg-white text-[#273F4B] px-8 py-4 rounded-md font-bold text-base flex items-center justify-center gap-3 hover:bg-gray-100 transition-colors shadow-lg"
             >
@@ -132,7 +136,7 @@
             </a>
 
             <div class="grid grid-cols-2 gap-3 text-sm text-(--color-2)">
-                <a href="mailto:contato@kevinwillian.adv.br" (click)="fecharMenu()" class="rounded-md border border-white/15 px-4 py-3 transition-colors hover:bg-white/10">
+                <a [href]="contact.emailUrl || '/#contato'" (click)="fecharMenu()" class="rounded-md border border-white/15 px-4 py-3 transition-colors hover:bg-white/10">
                     E-mail
                 </a>
                 <a href="/#contato" (click)="fecharMenu()" class="rounded-md border border-white/15 px-4 py-3 transition-colors hover:bg-white/10">
@@ -158,9 +162,9 @@
                 Atendimento jurídico com foco em orientar, prevenir riscos e conduzir cada caso com clareza do primeiro contato ao encerramento.
             </p>
             <a
-                href="https://wa.me/5511999999999"
-                target="_blank"
-                rel="noopener noreferrer"
+                [href]="primaryContactUrl"
+                [attr.target]="primaryContactTarget"
+                [attr.rel]="primaryContactRel"
                 class="mt-6 inline-flex items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-bold text-[#273F4B] transition-colors hover:bg-gray-100"
             >
                 <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -175,38 +179,50 @@
                 <a href="/#inicio" class="block text-(--color-2) hover:text-(--color-5)">Início</a>
                 <a href="/#sobre" class="block text-(--color-2) hover:text-(--color-5)">Sobre o Advogado</a>
                 <a href="/#servicos" class="block text-(--color-2) hover:text-(--color-5)">Áreas de Atuação</a>
-                <a href="/artigos" class="block text-(--color-2) hover:text-(--color-5)">Blog Jurídico</a>
+                @if (articlesEnabled) {
+                    <a href="/artigos" class="block text-(--color-2) hover:text-(--color-5)">Blog Jurídico</a>
+                }
                 <a href="/#contato" class="block text-(--color-2) hover:text-(--color-5)">Contato</a>
             </nav>
         </div>
         <div>
             <h4 class="mb-4 text-sm font-bold uppercase tracking-wider text-white">Atendimento</h4>
             <nav class="space-y-3 text-sm">
-                <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" class="block text-(--color-2) hover:text-(--color-5)">Agendar pelo WhatsApp</a>
+                <a [href]="primaryContactUrl" [attr.target]="primaryContactTarget" [attr.rel]="primaryContactRel" class="block text-(--color-2) hover:text-(--color-5)">Agendar pelo WhatsApp</a>
                 <a href="/#contato" class="block text-(--color-2) hover:text-(--color-5)">Enviar mensagem</a>
-                <a href="/artigos" class="block text-(--color-2) hover:text-(--color-5)">Ler artigos jurídicos</a>
+                @if (articlesEnabled) {
+                    <a href="/artigos" class="block text-(--color-2) hover:text-(--color-5)">Ler artigos jurídicos</a>
+                }
                 <a href="/#servicos" class="block text-(--color-2) hover:text-(--color-5)">Ver especialidades</a>
             </nav>
         </div>
         <div>
             <h4 class="mb-4 text-sm font-bold uppercase tracking-wider text-white">Contato</h4>
             <div class="space-y-4 text-sm">
-                <div class="border-b border-white/10 pb-3">
-                    <p class="text-(--color-5)">Telefone / WhatsApp</p>
-                    <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" class="hover:text-(--color-5)">(11) 99999-9999</a>
-                </div>
-                <div class="border-b border-white/10 pb-3">
-                    <p class="text-(--color-5)">E-mail</p>
-                    <a href="mailto:contato@kevinwillian.adv.br" class="hover:text-(--color-5)">contato@kevinwillian.adv.br</a>
-                </div>
-                <div class="border-b border-white/10 pb-3">
-                    <p class="text-(--color-5)">Instagram</p>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="hover:text-(--color-5)">@kevinwillian.adv</a>
-                </div>
-                <div>
-                    <p class="text-(--color-5)">Linkedin</p>
-                    <a href="#" class="hover:text-(--color-5)">www.linkedin.com/in/kevinwillian.adv</a>
-                </div>
+                @if (contact.phoneDisplay) {
+                    <div class="border-b border-white/10 pb-3">
+                        <p class="text-(--color-5)">Telefone / WhatsApp</p>
+                        <a [href]="contact.whatsappUrl || '/#contato'" target="_blank" rel="noopener noreferrer" class="hover:text-(--color-5)">{{ contact.phoneDisplay }}</a>
+                    </div>
+                }
+                @if (contact.email) {
+                    <div class="border-b border-white/10 pb-3">
+                        <p class="text-(--color-5)">E-mail</p>
+                        <a [href]="contact.emailUrl" class="hover:text-(--color-5)">{{ contact.email }}</a>
+                    </div>
+                }
+                @if (contact.instagramUrl) {
+                    <div class="border-b border-white/10 pb-3">
+                        <p class="text-(--color-5)">Instagram</p>
+                        <a [href]="contact.instagramUrl" target="_blank" rel="noopener noreferrer" class="hover:text-(--color-5)">{{ contact.instagramLabel }}</a>
+                    </div>
+                }
+                @if (contact.linkedinUrl) {
+                    <div>
+                        <p class="text-(--color-5)">Linkedin</p>
+                        <a [href]="contact.linkedinUrl" target="_blank" rel="noopener noreferrer" class="hover:text-(--color-5)">{{ contact.linkedinLabel }}</a>
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -236,9 +252,9 @@
             </button>
 
             <a
-                href="https://wa.me/5511999999999"
-                target="_blank"
-                rel="noopener noreferrer"
+                [href]="primaryContactUrl"
+                [attr.target]="primaryContactTarget"
+                [attr.rel]="primaryContactRel"
                 aria-label="Iniciar conversa pelo WhatsApp"
                 class="flex gap-3 rounded-xl p-4 pr-12"
             >

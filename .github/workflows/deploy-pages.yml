@@ -243,3 +243,45 @@ jobs:
               print("No article row was finalized. It may have been edited after this workflow was queued.", file=sys.stderr)
               sys.exit(1)
           PY
+
+      - name: Finalize pending article statuses after settings build
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.article_id == '' }}
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${SUPABASE_URL}" ] || [ -z "${SUPABASE_SERVICE_ROLE_KEY}" ]; then
+            echo "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY secrets are required."
+            exit 1
+          fi
+
+          articles_enabled="$(curl --silent --show-error --fail-with-body \
+            --url "${SUPABASE_URL}/rest/v1/site_settings?id=eq.1&select=articles_enabled&limit=1" \
+            --header "apikey: ${SUPABASE_SERVICE_ROLE_KEY}" \
+            --header "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+            | python3 -c 'import json,sys; rows=json.load(sys.stdin); print("true" if rows and rows[0].get("articles_enabled") is not False else "false")')"
+
+          if [ "${articles_enabled}" != "true" ]; then
+            echo "Articles are disabled; keeping processing article statuses pending."
+            exit 0
+          fi
+
+          curl --silent --show-error --fail-with-body \
+            --request PATCH \
+            --url "${SUPABASE_URL}/rest/v1/articles?status=eq.0&published_at=not.is.null" \
+            --header "apikey: ${SUPABASE_SERVICE_ROLE_KEY}" \
+            --header "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+            --header "Content-Type: application/json" \
+            --header "Prefer: return=minimal" \
+            --data '{"status":1}'
+
+          curl --silent --show-error --fail-with-body \
+            --request PATCH \
+            --url "${SUPABASE_URL}/rest/v1/articles?status=eq.0&published_at=is.null" \
+            --header "apikey: ${SUPABASE_SERVICE_ROLE_KEY}" \
+            --header "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+            --header "Content-Type: application/json" \
+            --header "Prefer: return=minimal" \
+            --data '{"status":2,"published_by":null}'

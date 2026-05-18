@@ -32,11 +32,42 @@
 </section>
 
 @if (article?.content) {
-    <article [innerHTML]="article?.content" class="article mx-auto w-full max-w-300 space-y-6 px-6 py-12 text-justify text-base leading-relaxed text-gray-700 sm:px-8 sm:text-lg xl:px-0"></article>
+    <article [innerHTML]="article?.content" class="article-content mx-auto w-full max-w-300 px-6 py-12 text-justify text-base leading-relaxed text-gray-700 sm:px-8 sm:text-lg xl:px-0"></article>
 } @else {
-    <article class="article mx-auto w-full max-w-300 space-y-6 px-6 py-12 text-justify text-base leading-relaxed text-gray-700 sm:px-8 sm:text-lg xl:px-0">
+    <article class="article-content mx-auto w-full max-w-300 px-6 py-12 text-justify text-base leading-relaxed text-gray-700 sm:px-8 sm:text-lg xl:px-0">
         <p>Conteúdo em breve.</p>
     </article>
+}
+
+@if ((article?.authors?.length ?? 0) > 0) {
+    <section class="mx-auto w-full max-w-300 px-6 pb-14 sm:px-8 xl:px-0">
+        <div class="border-t border-gray-200 pt-8">
+            <p class="mb-5 text-xs font-bold uppercase tracking-wider text-[#5A6D75]">Escrito por</p>
+            <div class="grid gap-4 md:grid-cols-2">
+                @for (author of article?.authors ?? []; track author.id) {
+                    <div class="flex items-start gap-4 rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+                        <img [src]="author.profileImageUrl || '/images/avatar-placeholder.png'" alt="Imagem de Perfil do Autor {{ author.name }}" class="h-16 w-16 shrink-0 rounded-full border border-gray-100 object-cover object-center" (error)="useAvatarFallback($event)" />
+                        <div class="min-w-0 flex-1">
+                            <h3 class="text-base font-bold text-gray-950">{{ author.name }}</h3>
+                            @if (author.headline) {
+                                <p class="mt-1 text-sm leading-relaxed text-gray-600">{{ author.headline }}</p>
+                            }
+                            @if (author.websiteUrl || author.linkedinUrl) {
+                                <div class="mt-4 flex flex-wrap gap-3 text-sm font-semibold text-[#273F4B]">
+                                    @if (author.websiteUrl) {
+                                        <a [href]="author.websiteUrl" target="_blank" rel="noopener noreferrer" class="hover:underline">Site</a>
+                                    }
+                                    @if (author.linkedinUrl) {
+                                        <a [href]="author.linkedinUrl" target="_blank" rel="noopener noreferrer" class="hover:underline">LinkedIn</a>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
 }
 
 @if (relatedArticlesCount > 0) {
@@ -85,7 +116,7 @@
     <p class="text-gray-700 mb-6">
         Entre em contato conosco e descubra como podemos ajudar no seu caso.
     </p>
-    <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer"
+    <a [href]="primaryContactUrl" [attr.target]="primaryContactTarget" [attr.rel]="primaryContactRel"
        class="inline-block bg-(--color-1) text-white px-8 py-3 rounded-md font-semibold shadow-md">
         Fale Conosco
     </a>
