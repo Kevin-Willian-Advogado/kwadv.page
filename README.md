@@ -62,6 +62,16 @@ Ao fazer push na branch `main`, o workflow:
 2. executa `npm run build`;
 3. publica `dist/kwadv.page/browser`.
 
+O CMS tambem pode acionar esse workflow via `workflow_dispatch` para publicar ou remover um artigo. Os inputs usados sao:
+
+- `article_id`
+- `article_slug`
+- `article_updated_at`
+- `publication_action` (`publish` ou `unpublish`)
+- `actor_id`
+
+Quando chamado pelo CMS, o workflow espera o estado do artigo aparecer no Supabase, gera o site estatico, valida a rota `/artigo/:slug` e so entao finaliza o status do artigo. A finalizacao atualiza apenas linhas ainda em `status = 0`, evitando marcar como publicado um registro que ja saiu do estado de processamento.
+
 O dominio configurado em `public/CNAME` e:
 
 ```text
@@ -89,8 +99,13 @@ Comandos uteis no PowerShell:
 
 Para publicar novos artigos:
 
-1. atualize os dados no Supabase;
-2. rode `npm run build` localmente para validar;
-3. faca commit e push na `main`.
+1. atualize os dados no Supabase pelo CMS;
+2. publique ou remova o artigo pelo CMS para disparar o workflow;
+3. valide o resultado em GitHub Actions e no GitHub Pages.
 
 O conteudo novo so aparece no site apos um novo build.
+
+Secrets esperados no repositorio:
+
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`

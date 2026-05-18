@@ -94,8 +94,6 @@ jobs:
               "select": "id,slug,status,published_at,updated_at",
               "limit": "1",
           }
-          if article_updated_at:
-              params["updated_at"] = f"eq.{article_updated_at}"
 
           url = f"{supabase_url}/rest/v1/articles?{urllib.parse.urlencode(params)}"
           headers = {
@@ -109,6 +107,10 @@ jobs:
 
               status = row.get("status")
               published_at = row.get("published_at")
+              updated_at = str(row.get("updated_at") or "")
+
+              if article_updated_at and not updated_at:
+                  return False
 
               if action == "unpublish":
                   return status == 0 and published_at is None
@@ -209,11 +211,14 @@ jobs:
 
           params = {
               "id": f"eq.{os.environ['ARTICLE_ID']}",
+              "status": "eq.0",
               "select": "id",
           }
-          updated_at = os.environ.get("ARTICLE_UPDATED_AT", "").strip()
-          if updated_at:
-              params["updated_at"] = f"eq.{updated_at}"
+          action = os.environ.get("PUBLICATION_ACTION", "publish")
+          if action == "unpublish":
+              params["published_at"] = "is.null"
+          else:
+              params["published_at"] = "not.is.null"
 
           print(urllib.parse.urlencode(params))
           PY
